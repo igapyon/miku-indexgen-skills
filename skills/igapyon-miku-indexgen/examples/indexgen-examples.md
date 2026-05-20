@@ -1,3 +1,13 @@
+---
+title: miku-indexgen CLI command examples
+topics:
+  - miku-indexgen
+  - command-line
+  - java-runtime
+  - node-runtime
+  - examples
+---
+
 # Examples
 
 Generate `index.json` inside the input directory:

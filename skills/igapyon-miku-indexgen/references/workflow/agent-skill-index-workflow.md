@@ -1,3 +1,14 @@
+---
+title: Agent Skill index workflow
+topics:
+  - miku-indexgen
+  - agent-skills
+  - index-json
+  - maven
+  - single-skill
+  - multi-skill
+---
+
 # Agent Skill Index Workflow
 
 Use this workflow when applying `miku-indexgen` to an Agent Skills package.

@@ -1,3 +1,14 @@
+---
+title: Input files specification
+topics:
+  - miku-indexgen
+  - input-files
+  - markdown
+  - front-matter
+  - json-summary
+  - directory-scan
+---
+
 # Input Files Specification
 
 This reference summarizes how `miku-indexgen` treats input directories and input
@@ -233,13 +244,18 @@ Notes:
 
 ## Recommended Markdown Authoring
 
-When Markdown files are intended to be indexed by `miku-indexgen`, write
-front matter when it is natural and low-cost.
+When Markdown files are intended to be indexed by `miku-indexgen`, treat
+supported front matter as the preferred way to provide stable index metadata.
 
 In repositories or directories where the `miku-indexgen` series is intentionally
-introduced, prefer adding supported front matter to Markdown files actively,
-within a reasonable maintenance cost. This makes generated indexes more useful
-for agents and humans without requiring manual edits to `index.json`.
+introduced, actively maintain supported front matter on Markdown files as part
+of normal Markdown maintenance. This makes generated indexes more useful for
+agents and humans without requiring manual edits to `index.json`.
+
+In practice, when creating or materially editing a Markdown file in a
+`miku-indexgen`-managed area, add or improve `title` and `topics` unless the
+document is too temporary, too trivial, or the right metadata would be
+misleading.
 
 Recommended minimal front matter:
 
@@ -256,16 +272,17 @@ Guidance:
 
 - use `title` when the document has a stable human-readable title
 - use `topics` for a short list of useful search or grouping terms
-- in `miku-indexgen`-managed areas, prefer adding `title` and `topics` when
-  touching Markdown files for normal maintenance
+- in `miku-indexgen`-managed areas, expect durable Markdown files to have
+  `title` and practical `topics`
 - keep topics practical and sparse; avoid turning front matter into a taxonomy
 - do not invent front matter just to satisfy `miku-indexgen`
 - keep the Markdown body readable without relying on front matter
 - write a clear first heading or leading paragraph because it may become
   `summary`
 
-This is a recommendation for better generated indexes, not a requirement.
-Markdown files without front matter can still be indexed.
+This is an authoring convention for better generated indexes. Markdown files
+without front matter can still be indexed, but durable Markdown files in managed
+areas should normally gain supported front matter over time.
 
 ## JSON Files
 

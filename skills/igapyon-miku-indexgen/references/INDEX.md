@@ -1,3 +1,13 @@
+---
+title: igapyon-miku-indexgen references
+topics:
+  - miku-indexgen
+  - references
+  - navigation
+  - index-json
+  - agent-skill
+---
+
 # References
 
 This is the curated reference guide for agents using `igapyon-miku-indexgen`.

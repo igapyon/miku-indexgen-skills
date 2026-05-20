@@ -1,3 +1,14 @@
+---
+title: igapyon-miku-indexgen usage
+topics:
+  - miku-indexgen
+  - usage
+  - agent-skill
+  - command-line
+  - index-json
+  - runtime-artifacts
+---
+
 # Usage
 
 This document keeps the agent-facing usage details for `miku-indexgen-skills`
