@@ -1,3 +1,14 @@
+---
+title: Runtime operations map
+topics:
+  - miku-indexgen
+  - runtime
+  - command-line
+  - java-runtime
+  - node-runtime
+  - backend-policy
+---
+
 # Operations Map
 
 ## Backend Policy

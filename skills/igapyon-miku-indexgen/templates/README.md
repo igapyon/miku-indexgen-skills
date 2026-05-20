@@ -1,3 +1,14 @@
+---
+title: miku-indexgen templates
+topics:
+  - miku-indexgen
+  - templates
+  - maven
+  - antrun
+  - single-skill
+  - multi-skill
+---
+
 # Templates
 
 This directory contains reusable `miku-indexgen` request, configuration, or

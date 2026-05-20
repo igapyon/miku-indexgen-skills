@@ -62,6 +62,10 @@ directory, recursion setting, extension filters, encoding, and overwrite policy.
 - preserve `index.json` and `index.md` as inspectable file artifacts
 - update generated `index.json` by rerunning `miku-indexgen`, not by manual
   editing
+- in `miku-indexgen`-managed areas, treat supported Markdown front matter
+  (`title`, `topics`) as expected index metadata for Markdown files; add or
+  improve it during normal Markdown maintenance unless doing so would be noisy,
+  misleading, or outside the requested change
 - inspect command status and stderr before reporting success
 - keep diagnostics visible when the runtime reports warnings or expected
   failures
@@ -150,4 +154,5 @@ Read these only when needed:
   or update rules
 - [references/runtime/input-files-spec.md](references/runtime/input-files-spec.md)
   when the user asks about input directories, scanned files, encodings,
-  extension filters, or Markdown / JSON metadata extraction
+  extension filters, Markdown front matter, or Markdown / JSON metadata
+  extraction

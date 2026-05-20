@@ -1,3 +1,14 @@
+---
+title: Maven index generation examples
+topics:
+  - miku-indexgen
+  - maven
+  - antrun
+  - agent-skills
+  - index-json
+  - examples
+---
+
 # Maven Index Generation Examples
 
 Use these examples when adding generated `index.json` files to Agent Skills
