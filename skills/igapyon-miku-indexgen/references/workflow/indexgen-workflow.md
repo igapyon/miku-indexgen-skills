@@ -10,5 +10,8 @@
 8. Inspect exit status, stderr, and generated files.
 9. Report the output paths and any diagnostics.
 
+`index.json` is a generated artifact. When it needs to change, rerun
+`miku-indexgen`; do not manually edit `index.json` as a maintenance step.
+
 The skill layer should not parse source files or synthesize `index.json` itself.
 That behavior belongs to the bundled upstream runtime.

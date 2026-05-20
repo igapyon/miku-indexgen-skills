@@ -1,5 +1,34 @@
 # Operations Map
 
+## Backend Policy
+
+Unless the user or environment states another execution policy, use
+`cli-preferred`.
+
+Policy values:
+
+- `cli-only`: use only the bundled CLI backend; do not fall back to visible
+  handoff
+- `cli-preferred`: use the bundled CLI backend first; if CLI is unavailable,
+  return visible handoff material
+- `handoff-only`: do not execute backend operations; return visible command
+  guidance or handoff steps
+
+For `cli-only` and `cli-preferred`, use this runtime order:
+
+1. read `SKILL.md`
+2. check versioned runtime artifacts matching
+   `skills/igapyon-miku-indexgen/runtime/miku-indexgen-*.jar` and
+   `skills/igapyon-miku-indexgen/runtime/miku-indexgen-*.mjs`
+3. prefer the newest Java jar for operations it supports
+4. use the newest Node.js `.mjs` when the Java runtime is missing or unsuitable
+5. only if the declared path is missing or unusable, report the runtime-path
+   problem
+
+Runtime artifact file versions may differ from the text returned by
+`--version`. Use file-name versions for artifact selection, and use `--version`
+only as a smoke check that the runtime starts.
+
 ## generate
 
 Backend command:
@@ -31,3 +60,16 @@ Optional arguments are passed through to the upstream runtime:
 ## version
 
 Use `--version` only as a runtime smoke check.
+
+## Java-Only Operation
+
+The helper files under `lib/*.mjs` require Node.js. They are convenience helpers
+for runtime lookup, CLI invocation, and tests. They are not part of the Java
+runtime.
+
+If the active environment has Java but does not have Node.js, use the Java jar
+directly:
+
+```bash
+java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-<version>.jar --input-directory docs --output-directory workplace/indexgen --markdown
+```

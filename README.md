@@ -19,6 +19,9 @@ index files.
 - can use UTF-8 or Shift_JIS input and output encodings
 - bundles both Node.js and Java runtime artifacts for local CLI execution
 
+`index.json` is generated and updated by `miku-indexgen`; it is not a file that
+needs manual maintenance.
+
 This repository is not an MCP server and does not replace the upstream
 `miku-indexgen` product. It packages the upstream CLI runtimes with
 agent-facing instructions and tests.

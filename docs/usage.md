@@ -21,6 +21,10 @@ Generated outputs:
 - `index.json`
 - optional `index.md`
 
+`index.json` is generated and updated by `miku-indexgen`. It should not be
+maintained by hand. When the source directory changes or the index needs to be
+refreshed, rerun `miku-indexgen`.
+
 ## Agent Requests
 
 Examples:
@@ -97,3 +101,9 @@ check that the runtime starts.
 
 Runtime source URLs and SHA-256 digests are documented in
 [development.md](development.md).
+
+The generated `index.json` structure is documented for agent use in
+[`references/runtime/index-json-spec.md`](../skills/igapyon-miku-indexgen/references/runtime/index-json-spec.md).
+
+Input directory and input file handling is documented for agent use in
+[`references/runtime/input-files-spec.md`](../skills/igapyon-miku-indexgen/references/runtime/input-files-spec.md).
