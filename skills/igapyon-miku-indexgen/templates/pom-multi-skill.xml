@@ -13,7 +13,9 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.antrun.plugin.version>3.1.0</maven.antrun.plugin.version>
     <skills.dir>${project.basedir}/skills</skills.dir>
-    <indexgen.jar>${project.basedir}/skills/__INDEXGEN_SKILL_NAME__/runtime/miku-indexgen-__INDEXGEN_JAVA_VERSION__.jar</indexgen.jar>
+    <indexgen.skill.name>__INDEXGEN_SKILL_NAME__</indexgen.skill.name>
+    <indexgen.java.version>__INDEXGEN_JAVA_VERSION__</indexgen.java.version>
+    <indexgen.jar>${project.basedir}/skills/${indexgen.skill.name}/runtime/miku-indexgen-${indexgen.java.version}.jar</indexgen.jar>
   </properties>
 
   <build>

@@ -14,7 +14,8 @@
     <maven.antrun.plugin.version>3.1.0</maven.antrun.plugin.version>
     <skill.name>__SKILL_NAME__</skill.name>
     <skill.dir>${project.basedir}/skills/${skill.name}</skill.dir>
-    <indexgen.jar>${skill.dir}/runtime/miku-indexgen-__INDEXGEN_JAVA_VERSION__.jar</indexgen.jar>
+    <indexgen.java.version>__INDEXGEN_JAVA_VERSION__</indexgen.java.version>
+    <indexgen.jar>${skill.dir}/runtime/miku-indexgen-${indexgen.java.version}.jar</indexgen.jar>
   </properties>
 
   <build>

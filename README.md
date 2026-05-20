@@ -10,9 +10,9 @@ In directories with many files, the generated index gives AI agents a compact
 overview before they choose what to read. This is intended to reduce the number
 and size of files an agent needs to load into context.
 
-Use this skill when you want an agent to understand the shape of a repository,
-documentation directory, skill package, or other file tree through generated
-index files.
+Use this skill when you want an agent to understand a selected documentation
+directory, Agent Skill package, reference directory, or other explicitly chosen
+file area through generated index files.
 
 ## What It Does
 
