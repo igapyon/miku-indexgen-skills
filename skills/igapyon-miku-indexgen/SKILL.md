@@ -42,11 +42,25 @@ directory, recursion setting, extension filters, encoding, and overwrite policy.
   source directory
 - use `--markdown` only when the user needs `index.md`
 - preserve `index.json` and `index.md` as inspectable file artifacts
+- treat `index.json` as a generated artifact that must be updated by
+  `miku-indexgen`, not by manual editing
 - inspect command status and stderr before reporting success
 - keep diagnostics visible when the runtime reports warnings or expected
   failures
 - do not reimplement index generation, front matter parsing, JSON summary
   extraction, encoding conversion, or Markdown output in the skill layer
+
+## Generated Index Discipline
+
+`index.json` is generated and updated by the upstream `miku-indexgen` runtime.
+Do not maintain it by hand.
+
+When `index.json` is missing, stale, or needs different options, rerun
+`miku-indexgen` with the intended input directory, output directory, filters,
+encoding, recursion, and overwrite policy. Do not manually patch `index.json`
+as a substitute for running the runtime.
+
+The same principle applies to `index.md` when Markdown output is enabled.
 
 ## Operations
 
@@ -75,45 +89,12 @@ Common options:
 For explicit `miku-indexgen` requests, first check the bundled runtime artifacts
 before broad workspace exploration or generic tool discovery.
 
-Unless the user or environment states another execution policy, use
-`cli-preferred`.
+Default to `cli-preferred`: use the bundled Java runtime first, use the bundled
+Node.js runtime when Java is unavailable or unsuitable, and return visible
+handoff material only when local CLI execution cannot proceed.
 
-Policy values:
-
-- `cli-only`: use only the bundled CLI backend; do not fall back to visible
-  handoff
-- `cli-preferred`: use the bundled CLI backend first; if CLI is unavailable,
-  return visible handoff material
-- `handoff-only`: do not execute backend operations; return visible command
-  guidance or handoff steps
-
-For `cli-only` and `cli-preferred`, use this runtime order:
-
-1. read this `SKILL.md`
-2. check versioned runtime artifacts matching
-   `skills/igapyon-miku-indexgen/runtime/miku-indexgen-*.jar` and
-   `skills/igapyon-miku-indexgen/runtime/miku-indexgen-*.mjs`
-3. prefer the newest Java jar for operations it supports
-4. use the newest Node.js `.mjs` when the Java runtime is missing or unsuitable
-5. only if the declared path is missing or unusable, report the runtime-path
-   problem
-
-Runtime artifact file versions may differ from the text returned by
-`--version`. Use file-name versions for artifact selection, and use `--version`
-only as a smoke check that the runtime starts.
-
-## Java-Only Operation
-
-The helper files under `lib/*.mjs` require Node.js. They are convenience helpers
-for runtime lookup, CLI invocation, and tests. They are not part of the Java
-runtime.
-
-If the active environment has Java but does not have Node.js, use the Java jar
-directly:
-
-```bash
-java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-<version>.jar --input-directory docs --output-directory workplace/indexgen --markdown
-```
+For runtime order, backend policy details, and Java-only operation, read
+[references/runtime/operations-map.md](references/runtime/operations-map.md).
 
 ## Error Handling
 
@@ -128,6 +109,8 @@ arguments, and unsupported policy values as hard errors.
 - Do not present this as a generic directory listing or file inventory skill.
 - Do not replace the upstream `miku-indexgen` runtime implementation with
   skill-local indexing logic.
+- Do not manually edit generated `index.json` files as a substitute for running
+  `miku-indexgen`.
 - Do not hide diagnostics from the runtime result.
 
 ## References
@@ -135,3 +118,11 @@ arguments, and unsupported policy values as hard errors.
 Read these only when needed:
 
 - [references/INDEX.md](references/INDEX.md) for detailed workflow, runtime, and examples
+- [references/runtime/operations-map.md](references/runtime/operations-map.md)
+  for runtime order, backend policy, and Java-only operation
+- [references/runtime/index-json-spec.md](references/runtime/index-json-spec.md)
+  when the user asks about generated `index.json` structure, fields, formatting,
+  or update rules
+- [references/runtime/input-files-spec.md](references/runtime/input-files-spec.md)
+  when the user asks about input directories, scanned files, encodings,
+  extension filters, or Markdown / JSON metadata extraction
