@@ -1,12 +1,17 @@
 # Usage
 
-This document keeps the user-facing details for `miku-indexgen-skills` outside
-the short README.
+This document keeps the agent-facing usage details for `miku-indexgen-skills`
+inside the installable skill bundle.
 
 ## When To Use
 
 Use `igapyon-miku-indexgen` when an agent should create an index before reading
 many files in full.
+
+This is especially useful in directories with many files. An agent can inspect
+`index.json` or `index.md` first, then choose a smaller set of files to read in
+detail. The expected effect is lower context usage from fewer and smaller file
+reads.
 
 Typical targets:
 
@@ -84,6 +89,12 @@ Build the release zip:
 npm run build:bundle:zip
 ```
 
+Generate the skill-local index:
+
+```bash
+mvn generate-resources
+```
+
 The release zip is generated under `bundle/`.
 
 ## Runtime And Version Notes
@@ -99,11 +110,12 @@ Runtime artifact file versions may differ between Node.js and Java artifacts.
 Use file-name versions for artifact selection and `--version` only as a smoke
 check that the runtime starts.
 
-Runtime source URLs and SHA-256 digests are documented in
-[development.md](development.md).
+Runtime source URLs and SHA-256 digests are documented in the source
+repository's `docs/development.md`. Installed skill bundles may not include that
+repository-level document.
 
 The generated `index.json` structure is documented for agent use in
-[`references/runtime/index-json-spec.md`](../skills/igapyon-miku-indexgen/references/runtime/index-json-spec.md).
+[runtime/index-json-spec.md](runtime/index-json-spec.md).
 
 Input directory and input file handling is documented for agent use in
-[`references/runtime/input-files-spec.md`](../skills/igapyon-miku-indexgen/references/runtime/input-files-spec.md).
+[runtime/input-files-spec.md](runtime/input-files-spec.md).

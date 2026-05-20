@@ -9,6 +9,10 @@ Use this skill for `miku-indexgen`-specific directory index generation workflows
 Keep the focus on local CLI-backed generation of `index.json` and optional
 `index.md` from explicitly selected directories.
 
+Use generated indexes to help agents inspect directories with many files before
+choosing which files to read in full. The expected effect is fewer unnecessary
+file reads and lower context size.
+
 For this skill, `miku-indexgen` is opt-in by default. Do not trigger it from
 generic words such as list, scan, files, tree, search, grep, read, code reading,
 file investigation, or review.
@@ -117,7 +121,11 @@ arguments, and unsupported policy values as hard errors.
 
 Read these only when needed:
 
+- [index.json](index.json) for the generated file inventory of this skill
+  package
 - [references/INDEX.md](references/INDEX.md) for detailed workflow, runtime, and examples
+- [references/workflow/agent-skill-index-workflow.md](references/workflow/agent-skill-index-workflow.md)
+  when applying generated `index.json` to an Agent Skills package
 - [references/runtime/operations-map.md](references/runtime/operations-map.md)
   for runtime order, backend policy, and Java-only operation
 - [references/runtime/index-json-spec.md](references/runtime/index-json-spec.md)
