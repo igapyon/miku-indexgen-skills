@@ -6,6 +6,10 @@ It helps an agent create a compact file index before reading many files in full.
 The bundled `miku-indexgen` runtime scans a directory and generates `index.json`.
 When Markdown output is enabled, it also generates `index.md`.
 
+In directories with many files, the generated index gives AI agents a compact
+overview before they choose what to read. This is intended to reduce the number
+and size of files an agent needs to load into context.
+
 Use this skill when you want an agent to understand the shape of a repository,
 documentation directory, skill package, or other file tree through generated
 index files.
@@ -85,6 +89,12 @@ Build the release zip:
 npm run build:bundle:zip
 ```
 
+Generate the skill-local index:
+
+```bash
+mvn generate-resources
+```
+
 The release zip is generated under `bundle/`.
 
 ## Runtime Artifacts
@@ -110,7 +120,7 @@ Runtime artifact file versions may differ between Node.js and Java artifacts. Us
 
 ## Developer Documents
 
-- [docs/usage.md](docs/usage.md)
+- [skills/igapyon-miku-indexgen/references/usage.md](skills/igapyon-miku-indexgen/references/usage.md)
 - [docs/development.md](docs/development.md)
 - [docs/miku-soft-reference.md](docs/miku-soft-reference.md)
 - [skills/igapyon-miku-indexgen/references/INDEX.md](skills/igapyon-miku-indexgen/references/INDEX.md)

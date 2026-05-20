@@ -29,6 +29,15 @@ Runtime artifact file versions may differ from the text returned by
 `--version`. Use file-name versions for artifact selection, and use `--version`
 only as a smoke check that the runtime starts.
 
+## Backend Capability Notes
+
+Both bundled runtimes can be used for ordinary single input-directory generation
+when the environment supports the runtime.
+
+Directory-level batch handling for multiple Agent Skills is Java-only. Use the
+Java runtime when generating an index for a parent `skills/` directory that
+covers multiple skill directories.
+
 ## generate
 
 Backend command:

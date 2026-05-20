@@ -1,5 +1,9 @@
 # Indexgen Workflow
 
+Use this workflow when a directory contains enough files that an agent should
+inspect a compact generated index before deciding which files to read in full.
+The expected effect is to reduce unnecessary file reads and context size.
+
 1. Confirm the user explicitly requested `igapyon-miku-indexgen` or `miku-indexgen`.
 2. Identify the input directory.
 3. Choose the output directory. Use a separate output directory when modifying the input directory is not intended.

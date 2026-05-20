@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>__GROUP_ID__</groupId>
+  <artifactId>__ARTIFACT_ID__</artifactId>
+  <version>__VERSION__</version>
+  <packaging>pom</packaging>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.antrun.plugin.version>3.1.0</maven.antrun.plugin.version>
+    <skills.dir>${project.basedir}/skills</skills.dir>
+    <indexgen.jar>${project.basedir}/skills/__INDEXGEN_SKILL_NAME__/runtime/miku-indexgen-__INDEXGEN_JAVA_VERSION__.jar</indexgen.jar>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>${maven.antrun.plugin.version}</version>
+        <executions>
+          <execution>
+            <id>generate-skills-index</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target name="generate-skills-index">
+                <java jar="${indexgen.jar}" fork="true" failonerror="true">
+                  <arg value="--input-directory" />
+                  <arg value="${skills.dir}" />
+                  <arg value="--title" />
+                  <arg value="Agent Skills Index" />
+                  <arg value="--include-ext" />
+                  <arg value="md,mjs,json" />
+                </java>
+              </target>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
