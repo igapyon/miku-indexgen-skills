@@ -91,6 +91,14 @@ file inventory for the skill package.
 When the repository already uses Maven conventions or wants a standard resource
 generation command, use Maven Antrun in `generate-resources`.
 
+Be very cautious with `pom.xml`. Creating or rewriting Maven build files is a
+repository-level build change. Do not do it just because this skill has Maven
+templates. Do it only when the user explicitly asks for Maven, Ant, `pom.xml`,
+or resource-generation wiring and agrees to that build-file change.
+
+If the user asks about the approach but has not agreed to edit `pom.xml`, explain
+the Maven + Ant option and point to the templates instead of changing files.
+
 Recommended command:
 
 ```bash

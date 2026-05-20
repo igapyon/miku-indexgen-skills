@@ -52,6 +52,39 @@ Node.js fallback:
 node skills/igapyon-miku-indexgen/runtime/miku-indexgen-<version>.mjs --input-directory <dir>
 ```
 
+When the user explicitly asks how to run the `miku-indexgen` Java runtime,
+Node.js runtime, CLI, command line, or similar one-shot execution, answer with
+the relevant command line. Prefer concrete commands using bundled artifact names
+when they are known.
+
+Do not treat generic Java, Node.js, Maven, Ant, or command-line questions as
+`miku-indexgen` requests unless the user explicitly names `miku-indexgen` or
+asks about generated `index.json`.
+
+Bundled Java command:
+
+```bash
+java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.2.1.jar --input-directory docs
+```
+
+Bundled Node.js command:
+
+```bash
+node skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.2.0.mjs --input-directory docs
+```
+
+Generate Markdown too:
+
+```bash
+java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.2.1.jar --input-directory docs --markdown
+```
+
+Write output to a separate directory:
+
+```bash
+java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.2.1.jar --input-directory docs --output-directory workplace/indexgen --markdown
+```
+
 Optional arguments are passed through to the upstream runtime:
 
 - `--output-directory <dir>`

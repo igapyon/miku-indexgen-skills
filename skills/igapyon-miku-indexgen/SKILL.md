@@ -13,17 +13,31 @@ Use generated indexes to help agents inspect directories with many files before
 choosing which files to read in full. The expected effect is fewer unnecessary
 file reads and lower context size.
 
-For this skill, `miku-indexgen` is opt-in by default. Do not trigger it from
-generic words such as list, scan, files, tree, search, grep, read, code reading,
-file investigation, or review.
+Non-negotiable: `index.json` is generated and updated by `miku-indexgen`.
+Never maintain or patch generated `index.json` by hand. When it is missing,
+stale, or needs different options, rerun the runtime.
+
+For this skill, `miku-indexgen` is narrow opt-in by default. Do not trigger it
+from generic words such as list, scan, files, tree, search, grep, read, code
+reading, file investigation, or review.
 
 Start `miku-indexgen` mode when at least one of these explicit triggers is
 present:
 
 - the user names `igapyon-miku-indexgen`
 - the user names `miku-indexgen`
+- the user explicitly asks to generate, create, refresh, or automatically update
+  `index.json`
+- the user asks for a command line to run the `miku-indexgen` Java or Node.js
+  runtime
 - the recent conversation is already in an active `miku-indexgen` workflow from
   an earlier explicit trigger
+
+Do not start this skill merely because a repository has `index.json`, `pom.xml`,
+Markdown files, many files, or an Agent Skills structure.
+Do not start this skill for generic command-line, Java, Node.js, Maven, or Ant
+questions unless they explicitly target `miku-indexgen` or generated
+`index.json`.
 
 Without one of these triggers, answer normally or ask a brief clarifying
 question if using `miku-indexgen` would materially change the result.
@@ -46,11 +60,14 @@ directory, recursion setting, extension filters, encoding, and overwrite policy.
   source directory
 - use `--markdown` only when the user needs `index.md`
 - preserve `index.json` and `index.md` as inspectable file artifacts
-- treat `index.json` as a generated artifact that must be updated by
-  `miku-indexgen`, not by manual editing
+- update generated `index.json` by rerunning `miku-indexgen`, not by manual
+  editing
 - inspect command status and stderr before reporting success
 - keep diagnostics visible when the runtime reports warnings or expected
   failures
+- do not create or rewrite `pom.xml` unless the user explicitly asks for Maven,
+  Ant, `pom.xml`, or resource-generation wiring and agrees to that repository
+  build-file change
 - do not reimplement index generation, front matter parsing, JSON summary
   extraction, encoding conversion, or Markdown output in the skill layer
 
@@ -127,7 +144,7 @@ Read these only when needed:
 - [references/workflow/agent-skill-index-workflow.md](references/workflow/agent-skill-index-workflow.md)
   when applying generated `index.json` to an Agent Skills package
 - [references/runtime/operations-map.md](references/runtime/operations-map.md)
-  for runtime order, backend policy, and Java-only operation
+  for command-line examples, runtime order, backend policy, and Java-only operation
 - [references/runtime/index-json-spec.md](references/runtime/index-json-spec.md)
   when the user asks about generated `index.json` structure, fields, formatting,
   or update rules

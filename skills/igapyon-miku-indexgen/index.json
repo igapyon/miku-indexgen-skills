@@ -10,12 +10,12 @@
   {"name":"INDEX.md","path":"references/INDEX.md","ext":"md","dir":"references","size":1399,"summary":"References"},
   {"name":"index-json-spec.md","path":"references/runtime/index-json-spec.md","ext":"md","dir":"references/runtime","size":4953,"summary":"index.json Specification"},
   {"name":"input-files-spec.md","path":"references/runtime/input-files-spec.md","ext":"md","dir":"references/runtime","size":8551,"summary":"Input Files Specification"},
-  {"name":"operations-map.md","path":"references/runtime/operations-map.md","ext":"md","dir":"references/runtime","size":2553,"summary":"Operations Map"},
+  {"name":"operations-map.md","path":"references/runtime/operations-map.md","ext":"md","dir":"references/runtime","size":3595,"summary":"Operations Map"},
   {"name":"usage.md","path":"references/usage.md","ext":"md","dir":"references","size":3390,"summary":"Usage"},
-  {"name":"agent-skill-index-workflow.md","path":"references/workflow/agent-skill-index-workflow.md","ext":"md","dir":"references/workflow","size":4419,"summary":"Agent Skill Index Workflow"},
+  {"name":"agent-skill-index-workflow.md","path":"references/workflow/agent-skill-index-workflow.md","ext":"md","dir":"references/workflow","size":4883,"summary":"Agent Skill Index Workflow"},
   {"name":"indexgen-workflow.md","path":"references/workflow/indexgen-workflow.md","ext":"md","dir":"references/workflow","size":1091,"summary":"Indexgen Workflow"},
   {"name":"miku-indexgen-1.2.0.mjs","path":"runtime/miku-indexgen-1.2.0.mjs","ext":"mjs","dir":"runtime","size":580871},
-  {"name":"SKILL.md","path":"SKILL.md","ext":"md","dir":"","size":5729,"summary":"Miku Indexgen"},
+  {"name":"SKILL.md","path":"SKILL.md","ext":"md","dir":"","size":6604,"summary":"Miku Indexgen"},
   {"name":"README.md","path":"templates/README.md","ext":"md","dir":"templates","size":331,"summary":"Templates"}
  ]
 }
