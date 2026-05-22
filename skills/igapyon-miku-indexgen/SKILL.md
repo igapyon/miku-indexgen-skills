@@ -85,6 +85,10 @@ When `index.json` is missing, stale, or needs different options, rerun
 encoding, recursion, and overwrite policy. Do not manually patch `index.json`
 as a substitute for running the runtime.
 
+When an existing generated `index.json` already contains `generation` metadata,
+prefer `--refresh-index <index.json>` to regenerate it with the stored
+conditions.
+
 The same principle applies to `index.md` when Markdown output is enabled.
 
 ## Operations
@@ -93,10 +97,18 @@ Primary operation:
 
 - `generate`: run `miku-indexgen` against an input directory and produce
   `index.json`, with optional `index.md`
+- `batch-generate`: with the Java runtime, run
+  `miku-indexgen --input-parent-directory <dir>` to generate indexes for each
+  direct visible child directory as an independent input base
+- `refresh`: run `miku-indexgen --refresh-index <index.json>` to regenerate an
+  existing generated index from its stored generation metadata
 
 Common options:
 
 - `--input-directory <dir>`
+- `--input-parent-directory <dir>`: Java runtime only in the bundled 1.3.0
+  runtime set
+- `--refresh-index <index.json>`
 - `--output-directory <dir>`
 - `--title <text>`
 - `--markdown`
