@@ -23,6 +23,7 @@ package.
 - [workflow/agent-skill-index-workflow.md](workflow/agent-skill-index-workflow.md): applying generated index.json to Agent Skills packages
 - [runtime/operations-map.md](runtime/operations-map.md): CLI operations and backend mapping
 - [runtime/input-files-spec.md](runtime/input-files-spec.md): directory-wide input, supported input formats, encoding, metadata rules, and recommended Markdown authoring
+- [runtime/miku-indexgen-frontmatter-spec.md](runtime/miku-indexgen-frontmatter-spec.md): proposed YAML front matter metadata fields, date metadata, and structured sources
 - [runtime/index-json-spec.md](runtime/index-json-spec.md): generated index.json structure and maintenance rules
 - [../examples/indexgen-examples.md](../examples/indexgen-examples.md): common command examples
 - [../examples/maven-index-generation.md](../examples/maven-index-generation.md): Maven generation examples for Agent Skills indexes

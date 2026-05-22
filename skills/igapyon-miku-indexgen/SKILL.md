@@ -156,3 +156,6 @@ Read these only when needed:
   when the user asks about input directories, scanned files, encodings,
   extension filters, Markdown front matter, or Markdown / JSON metadata
   extraction
+- [references/runtime/miku-indexgen-frontmatter-spec.md](references/runtime/miku-indexgen-frontmatter-spec.md)
+  when the user asks about proposed expanded YAML front matter metadata,
+  structured `sources`, `created`, `updated`, or future front matter direction

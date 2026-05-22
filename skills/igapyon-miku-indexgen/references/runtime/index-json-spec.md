@@ -60,8 +60,9 @@ Generated JSON uses a flat `files` array as the canonical structure.
 Root-level fields:
 
 - `title`: optional string, present when `--title <text>` is specified
-- `generator`: optional object, omitted when `--no-generator` is specified
-- `basePath`: string
+- `generator`: optional string, omitted when `--no-generator` is specified
+- `generation`: object containing refresh metadata
+- `basePath`: string path from the output directory to the input directory
 - `files`: array of file entries
 
 Example shape:
@@ -69,19 +70,37 @@ Example shape:
 ```json
 {
  "title": "Docs Index",
- "generator": {
-  "...": "..."
+ "generator": "miku-indexgen",
+ "generation": {
+  "schemaVersion": 1,
+  "inputPath": ".",
+  "markdownOutput": true,
+  "recursive": true,
+  "includeExtensions": ["md", "json"],
+  "inputEncoding": "utf8",
+  "outputEncoding": "utf8",
+  "title": "Docs Index",
+  "includeGeneratorMetadata": true
  },
- "basePath": "docs",
+ "basePath": ".",
  "files": [
   {"name":"README.md","path":"README.md","ext":"md","dir":"","size":1234,"summary":"..."}
  ]
 }
 ```
 
-The exact contents of `generator` are runtime metadata. Do not depend on unknown
-or undocumented `generator` subfields unless the upstream runtime documents
-them.
+The current runtime writes `generator` as the string `miku-indexgen`. Future
+versions may extend this metadata, but consumers should not depend on a richer
+shape unless the runtime documents it.
+
+`generation` stores the generation options needed by `--refresh-index`. It is
+separate from `generator`; `--no-generator` omits only root `generator` metadata
+and does not remove `generation`.
+
+`basePath` is relative to the directory containing the generated `index.json`.
+When input and output are the same directory, `basePath` is `"."`. When
+`--input-directory docs --output-directory out` is used, `basePath` is
+`"../docs"`.
 
 ## File Entries
 
@@ -95,10 +114,49 @@ Common fields:
 - `dir`: containing directory relative to the generated index base
 - `size`: file size in bytes
 - `title`: optional string, extracted from Markdown front matter
-- `topics`: optional array, extracted from Markdown front matter
+- `description`: optional string, extracted from Markdown front matter
+- `topics`: optional string array, extracted from Markdown front matter
+- `category`: optional string, extracted from Markdown front matter
+- `status`: optional string, extracted from Markdown front matter
+- `audience`: optional string array, extracted from Markdown front matter
+- `created`: optional `YYYY-MM-DD` string, extracted from Markdown front matter
+- `updated`: optional `YYYY-MM-DD` string, extracted from Markdown front matter
+- `sources`: optional source object array, extracted from Markdown front matter
 - `summary`: optional string
 
 Optional fields are omitted when the runtime does not extract a value.
+
+When generated output files are inside the scanned input tree, the output files
+themselves are excluded from `files[]`. For example, generating `docs/index.json`
+and `docs/index.md` does not add those generated files to the new `files[]`
+array.
+
+## Generation Metadata
+
+`generation` makes `index.json` self-describing enough to refresh.
+
+Fields:
+
+- `schemaVersion`: generation metadata schema version. Current value: `1`
+- `inputPath`: input directory path relative to the generated `index.json`
+  directory
+- `markdownOutput`: whether `index.md` should also be generated
+- `recursive`: whether subdirectories are scanned
+- `includeExtensions`: indexed file extensions
+- `inputEncoding`: input text encoding
+- `outputEncoding`: output text encoding
+- `jsonSummaryPaths`: optional JSON Pointer path list for JSON summaries
+- `title`: optional root title
+- `includeGeneratorMetadata`: whether root `generator` is written
+
+The following runtime-only options are intentionally not stored:
+
+- `overwrite`
+- `verbose`
+
+Use `--refresh-index <index.json>` to regenerate from `generation`. If
+`generation.markdownOutput` is `true`, the adjacent `index.md` is also
+regenerated.
 
 ## Markdown Summary Extraction
 
@@ -125,12 +183,16 @@ Expected file entry behavior:
 - `title` is omitted
 - `topics` is omitted
 
-Markdown front matter metadata is optional. `miku-indexgen` reads simple
-`title` and `topics` fields:
+Markdown front matter metadata is optional. Front matter should be authored as
+YAML. `miku-indexgen` extracts only documented fields into `index.json`; unknown
+fields and unsupported value shapes are ignored.
+
+Minimal metadata example:
 
 ```markdown
 ---
 title: Writing Guide
+description: Short description of the document.
 topics:
   - writing
   - article
@@ -138,7 +200,9 @@ topics:
 ---
 ```
 
-When present, these may appear in the file entry as `title` and `topics`.
+When present and supported by the runtime, documented metadata fields may appear
+in the file entry. Core fields include `title`, `description`, `topics`,
+`category`, `status`, `audience`, `created`, `updated`, and `sources`.
 
 ## JSON Summary Extraction
 

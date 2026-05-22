@@ -1,21 +1,23 @@
 {
  "title": "igapyon-miku-indexgen Skill Index",
  "generator": "miku-indexgen",
+ "generation": {"schemaVersion":1,"inputPath":".","markdownOutput":false,"recursive":true,"includeExtensions":["md","mjs","json"],"inputEncoding":"utf8","outputEncoding":"utf8","title":"igapyon-miku-indexgen Skill Index","includeGeneratorMetadata":true},
  "basePath": ".",
  "files": [
-  {"name":"indexgen-examples.md","path":"examples/indexgen-examples.md","ext":"md","dir":"examples","size":837,"title":"miku-indexgen CLI command examples","topics":["miku-indexgen","command-line","java-runtime","node-runtime","examples"],"summary":"Examples"},
+  {"name":"indexgen-examples.md","path":"examples/indexgen-examples.md","ext":"md","dir":"examples","size":839,"title":"miku-indexgen CLI command examples","topics":["miku-indexgen","command-line","java-runtime","node-runtime","examples"],"summary":"Examples"},
   {"name":"maven-index-generation.md","path":"examples/maven-index-generation.md","ext":"md","dir":"examples","size":1034,"title":"Maven index generation examples","topics":["miku-indexgen","maven","antrun","agent-skills","index-json","examples"],"summary":"Maven Index Generation Examples"},
   {"name":"cli-runner.mjs","path":"lib/cli-runner.mjs","ext":"mjs","dir":"lib","size":1237},
   {"name":"runtime-artifacts.mjs","path":"lib/runtime-artifacts.mjs","ext":"mjs","dir":"lib","size":2337},
-  {"name":"INDEX.md","path":"references/INDEX.md","ext":"md","dir":"references","size":1535,"title":"igapyon-miku-indexgen references","topics":["miku-indexgen","references","navigation","index-json","agent-skill"],"summary":"References"},
-  {"name":"index-json-spec.md","path":"references/runtime/index-json-spec.md","ext":"md","dir":"references/runtime","size":5105,"title":"index.json specification","topics":["miku-indexgen","index-json","specification","generated-artifact","files-array","metadata"],"summary":"index.json Specification"},
-  {"name":"input-files-spec.md","path":"references/runtime/input-files-spec.md","ext":"md","dir":"references/runtime","size":9029,"title":"Input files specification","topics":["miku-indexgen","input-files","markdown","front-matter","json-summary","directory-scan"],"summary":"Input Files Specification"},
-  {"name":"operations-map.md","path":"references/runtime/operations-map.md","ext":"md","dir":"references/runtime","size":3742,"title":"Runtime operations map","topics":["miku-indexgen","runtime","command-line","java-runtime","node-runtime","backend-policy"],"summary":"Operations Map"},
-  {"name":"usage.md","path":"references/usage.md","ext":"md","dir":"references","size":3540,"title":"igapyon-miku-indexgen usage","topics":["miku-indexgen","usage","agent-skill","command-line","index-json","runtime-artifacts"],"summary":"Usage"},
+  {"name":"INDEX.md","path":"references/INDEX.md","ext":"md","dir":"references","size":1707,"title":"igapyon-miku-indexgen references","topics":["miku-indexgen","references","navigation","index-json","agent-skill"],"summary":"References"},
+  {"name":"index-json-spec.md","path":"references/runtime/index-json-spec.md","ext":"md","dir":"references/runtime","size":7957,"title":"index.json specification","topics":["miku-indexgen","index-json","specification","generated-artifact","files-array","metadata"],"summary":"index.json Specification"},
+  {"name":"input-files-spec.md","path":"references/runtime/input-files-spec.md","ext":"md","dir":"references/runtime","size":12702,"title":"Input files specification","topics":["miku-indexgen","input-files","markdown","front-matter","json-summary","directory-scan"],"summary":"Input Files Specification"},
+  {"name":"miku-indexgen-frontmatter-spec.md","path":"references/runtime/miku-indexgen-frontmatter-spec.md","ext":"md","dir":"references/runtime","size":6177,"title":"miku-indexgen front matter specification","topics":["miku-indexgen","front-matter","yaml","metadata","sources"],"summary":"miku-indexgen Front Matter Specification"},
+  {"name":"operations-map.md","path":"references/runtime/operations-map.md","ext":"md","dir":"references/runtime","size":3744,"title":"Runtime operations map","topics":["miku-indexgen","runtime","command-line","java-runtime","node-runtime","backend-policy"],"summary":"Operations Map"},
+  {"name":"usage.md","path":"references/usage.md","ext":"md","dir":"references","size":3544,"title":"igapyon-miku-indexgen usage","topics":["miku-indexgen","usage","agent-skill","command-line","index-json","runtime-artifacts"],"summary":"Usage"},
   {"name":"agent-skill-index-workflow.md","path":"references/workflow/agent-skill-index-workflow.md","ext":"md","dir":"references/workflow","size":5027,"title":"Agent Skill index workflow","topics":["miku-indexgen","agent-skills","index-json","maven","single-skill","multi-skill"],"summary":"Agent Skill Index Workflow"},
   {"name":"indexgen-workflow.md","path":"references/workflow/indexgen-workflow.md","ext":"md","dir":"references/workflow","size":1522,"title":"Indexgen workflow","topics":["miku-indexgen","workflow","index-json","front-matter","generated-artifact","directory-scan"],"summary":"Indexgen Workflow"},
-  {"name":"miku-indexgen-1.2.0.mjs","path":"runtime/miku-indexgen-1.2.0.mjs","ext":"mjs","dir":"runtime","size":580871},
-  {"name":"SKILL.md","path":"SKILL.md","ext":"md","dir":"","size":6905,"summary":"Miku Indexgen"},
+  {"name":"miku-indexgen-1.3.0.1.mjs","path":"runtime/miku-indexgen-1.3.0.1.mjs","ext":"mjs","dir":"runtime","size":848622},
+  {"name":"SKILL.md","path":"SKILL.md","ext":"md","dir":"","size":7168,"description":"Use only when the user explicitly says `igapyon-miku-indexgen` or `miku-indexgen` for miku-indexgen-specific directory index generation workflows. This skill runs the bundled miku-indexgen CLI runtime to generate index.json and optional index.md files; do not auto-activate it for generic directory listing, file investigation, search, or code review requests.","summary":"Miku Indexgen"},
   {"name":"README.md","path":"templates/README.md","ext":"md","dir":"templates","size":465,"title":"miku-indexgen templates","topics":["miku-indexgen","templates","maven","antrun","single-skill","multi-skill"],"summary":"Templates"}
  ]
 }
