@@ -78,6 +78,18 @@ Bundled Java command:
 java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.3.0.jar --input-directory docs
 ```
 
+Java-only child-directory batch command:
+
+```bash
+java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.3.0.jar --input-parent-directory docs-parent --output-directory out --markdown
+```
+
+Refresh an existing generated index:
+
+```bash
+java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.3.0.jar --refresh-index docs/index.json
+```
+
 Bundled Node.js command:
 
 ```bash
@@ -96,8 +108,29 @@ Write output to a separate directory:
 java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.3.0.jar --input-directory docs --output-directory workplace/indexgen --markdown
 ```
 
+Use JSON summary extraction:
+
+```bash
+java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.3.0.jar --input-directory docs --json-summary-path /title,/name
+```
+
+Use a root title and no-overwrite guard:
+
+```bash
+java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.3.0.jar --input-directory docs --title "Docs Index" --no-overwrite
+```
+
+Use Shift_JIS input and output:
+
+```bash
+java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.3.0.jar --input-directory docs --input-encoding shift_jis --output-encoding shift_jis
+```
+
 Optional arguments are passed through to the upstream runtime:
 
+- `--input-parent-directory <dir>`: Java runtime only in the bundled 1.3.0
+  runtime set
+- `--refresh-index <index.json>`
 - `--output-directory <dir>`
 - `--title <text>`
 - `--markdown`

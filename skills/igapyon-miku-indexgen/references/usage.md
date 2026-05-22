@@ -62,6 +62,25 @@ Generate `index.json`:
 java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.3.0.jar --input-directory docs
 ```
 
+Generate an index with a root title:
+
+```bash
+java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.3.0.jar --input-directory docs --title "Docs Index"
+```
+
+Refresh an existing generated `index.json` from its stored generation metadata:
+
+```bash
+java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.3.0.jar --refresh-index docs/index.json
+```
+
+Generate indexes for each direct visible child directory. This is a Java
+runtime feature in the bundled 1.3.0 runtime set:
+
+```bash
+java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.3.0.jar --input-parent-directory docs-parent --output-directory workplace/indexgen --markdown
+```
+
 Generate `index.json` and `index.md` into a separate directory:
 
 ```bash
@@ -78,6 +97,24 @@ Restrict scanned extensions:
 
 ```bash
 java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.3.0.jar --input-directory docs --include-ext md,json
+```
+
+Extract JSON summaries from the first matching JSON Pointer:
+
+```bash
+java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.3.0.jar --input-directory docs --json-summary-path /title,/name
+```
+
+Avoid overwriting existing generated files:
+
+```bash
+java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.3.0.jar --input-directory docs --no-overwrite
+```
+
+Read and write Shift_JIS text:
+
+```bash
+java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.3.0.jar --input-directory docs --input-encoding shift_jis --output-encoding shift_jis
 ```
 
 ## Developer Commands
@@ -104,6 +141,12 @@ Generate the skill-local index:
 
 ```bash
 mvn generate-resources
+```
+
+Refresh the skill-local index directly:
+
+```bash
+java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.3.0.jar --refresh-index skills/igapyon-miku-indexgen/index.json
 ```
 
 The release zip is generated under `bundle/`.
