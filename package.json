@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node --test tests/*.test.mjs",
+    "test": "node --test --test-concurrency=1 tests/*.test.mjs",
     "build": "npm test && npm run build:bundle:zip",
     "build:bundle": "node scripts/build-skill-bundle.mjs",
     "build:bundle:zip": "node scripts/build-skill-bundle-zip.mjs"
