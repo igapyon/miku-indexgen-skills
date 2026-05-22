@@ -40,10 +40,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          test -s "skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.2.0.mjs"
-          test -s "skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.2.1.jar"
-          node "skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.2.0.mjs" --version
-          java -jar "skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.2.1.jar" --version
+          test -s "skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.3.0.1.mjs"
+          test -s "skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.3.0.jar"
+          node "skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.3.0.1.mjs" --version
+          java -jar "skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.3.0.jar" --version
 
       - name: Build release bundle
         run: npm run build
