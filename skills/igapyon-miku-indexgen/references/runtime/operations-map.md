@@ -75,25 +75,25 @@ asks about generated `index.json`.
 Bundled Java command:
 
 ```bash
-java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.2.1.jar --input-directory docs
+java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.3.0.jar --input-directory docs
 ```
 
 Bundled Node.js command:
 
 ```bash
-node skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.2.0.mjs --input-directory docs
+node skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.3.0.1.mjs --input-directory docs
 ```
 
 Generate Markdown too:
 
 ```bash
-java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.2.1.jar --input-directory docs --markdown
+java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.3.0.jar --input-directory docs --markdown
 ```
 
 Write output to a separate directory:
 
 ```bash
-java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.2.1.jar --input-directory docs --output-directory workplace/indexgen --markdown
+java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.3.0.jar --input-directory docs --output-directory workplace/indexgen --markdown
 ```
 
 Optional arguments are passed through to the upstream runtime:

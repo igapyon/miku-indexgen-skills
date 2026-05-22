@@ -7,12 +7,12 @@ test("java runtime starts", () => {
   const result = runCli({ runtime: "java", args: ["--version"] });
 
   assert.equal(result.status, 0);
-  assert.match(result.stdout, /miku-indexgen 1\.2\.1/);
+  assert.match(result.stdout, /miku-indexgen 1\.3\.0/);
 });
 
 test("node runtime starts", () => {
   const result = runCli({ runtime: "node", args: ["--version"] });
 
   assert.equal(result.status, 0);
-  assert.match(result.stdout, /miku-indexgen 1\.2\.0/);
+  assert.match(result.stdout, /miku-indexgen 1\.3\.0/);
 });

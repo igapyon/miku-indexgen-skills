@@ -33,6 +33,10 @@ When `--output-directory` is omitted, generated files are written under the
 input directory. When the generated index should not modify the source
 directory, use a separate output directory.
 
+Use `--refresh-index <index.json>` when an existing generated index already
+contains `generation` metadata and should be regenerated with the same stored
+conditions.
+
 ## Directory-Wide Input Model
 
 `miku-indexgen` takes a directory as its primary input, not an explicit list of
@@ -69,7 +73,8 @@ common file metadata for each indexed file.
 Documented format-specific behavior:
 
 - Markdown files
-  - front matter `title` and `topics` can be extracted
+  - front matter should be authored as YAML
+  - documented front matter metadata can be extracted
   - `summary` can be extracted from the first heading or leading body text
 - JSON files
   - `summary` is omitted by default
@@ -77,15 +82,34 @@ Documented format-specific behavior:
 - Other indexed files
   - common metadata such as name, path, extension, directory, and size can be
     recorded
+  - other extensions are indexed only when included with `--include-ext`
   - format-specific summary extraction should be treated as `要確認` unless
     upstream documentation states it
 
+By default, the runtime indexes Markdown and JSON files: `md,json`.
+
 Use `--include-ext <exts>` when the user wants to limit indexing to known
-formats, for example Markdown and JSON:
+formats or include additional file types:
 
 ```bash
 miku-indexgen --input-directory docs --include-ext md,json
 ```
+
+## Visible Entries
+
+`miku-indexgen` scans visible directory entries. Files and directories whose
+names start with `.` are skipped before extension filtering and recursion are
+applied.
+
+Examples of skipped entries:
+
+- `.git/`
+- `.github/`
+- `.DS_Store`
+- `.env`
+
+This means dotfiles and files under dot-directories are not indexed even if
+their extensions match `--include-ext`.
 
 ## Recursion
 
@@ -110,6 +134,11 @@ miku-indexgen --input-directory docs --include-ext md,json
 The extension list is comma-separated. The upstream README shows values without
 leading dots, such as `md,json`.
 
+The runtime normalizes extension values by lowercasing them and removing a
+leading dot, so `.md,JSON` is treated like `md,json`.
+
+When `--include-ext` is omitted, the default extension list is `md,json`.
+
 ## Input Encoding
 
 Use `--input-encoding <encoding>` to choose how text input is read.
@@ -133,7 +162,14 @@ use a specific encoding.
 For Markdown files, `miku-indexgen` can extract:
 
 - `title`: optional, from Markdown front matter
+- `description`: optional, from Markdown front matter
 - `topics`: optional, from Markdown front matter
+- `category`: optional, from Markdown front matter
+- `status`: optional, from Markdown front matter
+- `audience`: optional, from Markdown front matter
+- `created`: optional, from Markdown front matter
+- `updated`: optional, from Markdown front matter
+- `sources`: optional, from Markdown front matter
 - `summary`: optional, from the first heading or leading body text
 
 If the Markdown file starts with front matter, that front matter is excluded
@@ -149,12 +185,17 @@ In other words, a first heading such as `# Writing Guide` can become
 `summary`, but it does not become `title`. Use front matter when the generated
 `index.json` should contain a `title` field for that Markdown file.
 
-The front matter support is intentionally simple. The upstream README documents
-`title` and `topics`:
+Front matter should be authored as YAML. The index contract remains selective:
+`miku-indexgen` extracts only documented fields into `index.json`, and unknown
+or unsupported fields are ignored.
+
+The documented fields include `title`, `description`, `topics`, `category`,
+`status`, `audience`, `created`, `updated`, and `sources`:
 
 ```markdown
 ---
 title: Writing Guide
+description: Short description of the document.
 topics:
   - writing
   - article
@@ -162,15 +203,15 @@ topics:
 ---
 ```
 
-Do not assume that arbitrary front matter fields become `index.json` fields.
-Only rely on fields documented by the upstream runtime.
+Do not assume that arbitrary YAML fields become `index.json` fields. Only rely
+on fields documented by the runtime and the generated output specification.
 
 ## Supported Front Matter Syntax
 
 `miku-indexgen` recognizes front matter only when it appears at the start of a
 Markdown file.
 
-The first non-BOM line must be:
+The first physical line after an optional UTF-8 BOM must be:
 
 ```markdown
 ---
@@ -186,6 +227,13 @@ Supported fields:
 
 - `title: <text>`
 - `topics:`
+- `description: <text>`
+- `category: <text>`
+- `status: <text>`
+- `audience:`
+- `created: <YYYY-MM-DD>`
+- `updated: <YYYY-MM-DD>`
+- `sources:`
 
 Supported `title` examples:
 
@@ -232,15 +280,56 @@ topics: ["writing", "article", "tone"]
 ---
 ```
 
+Supported folded string metadata:
+
+```markdown
+---
+description: >
+  Short, explicit description written by the author.
+---
+```
+
+Supported date metadata:
+
+```markdown
+---
+created: 2026-05-22
+updated: 2026-05-22
+---
+```
+
+Supported structured `sources` metadata:
+
+```markdown
+---
+sources:
+  - type: human-input
+    label: user-provided requirements
+    role: primary
+    checked: 2026-05-22
+  - type: local-file
+    path: docs/index-json-spec.md
+    role: supporting
+---
+```
+
 Notes:
 
-- blank lines and comment lines starting with `#` inside front matter are
-  ignored
-- single or double quotes around `title` and topic values are removed
+- YAML indentation should use spaces; tab characters in indentation are not
+  supported
+- scalar strings and string arrays are preferred for ordinary metadata
+- `sources` is the supported structured exception because provenance metadata
+  loses meaning as a flat string
+- unknown top-level fields are ignored
+- documented fields with unsupported value shapes are ignored
+- unknown keys inside `sources[]` objects are ignored
+- arbitrary nested objects should not be treated as supported index metadata
 - empty values are ignored
-- unknown fields are ignored by the current runtime
-- nested YAML objects, complex arrays, and arbitrary front matter fields should
-  not be treated as supported index metadata unless upstream documents them
+- string values are sanitized before they are written to generated index output
+- single or double quotes around scalar values are handled by YAML parsing
+
+For the detailed YAML front matter metadata policy, see
+[miku-indexgen-frontmatter-spec.md](miku-indexgen-frontmatter-spec.md).
 
 ## Recommended Markdown Authoring
 
@@ -253,15 +342,16 @@ of normal Markdown maintenance. This makes generated indexes more useful for
 agents and humans without requiring manual edits to `index.json`.
 
 In practice, when creating or materially editing a Markdown file in a
-`miku-indexgen`-managed area, add or improve `title` and `topics` unless the
-document is too temporary, too trivial, or the right metadata would be
-misleading.
+`miku-indexgen`-managed area, add or improve `title`, `description`, and
+`topics` unless the document is too temporary, too trivial, or the right
+metadata would be misleading.
 
 Recommended minimal front matter:
 
 ```markdown
 ---
 title: Writing Guide
+description: Short description of the document.
 topics:
   - writing
   - article
@@ -271,9 +361,10 @@ topics:
 Guidance:
 
 - use `title` when the document has a stable human-readable title
+- use `description` for a short, explicit author-provided description
 - use `topics` for a short list of useful search or grouping terms
 - in `miku-indexgen`-managed areas, expect durable Markdown files to have
-  `title` and practical `topics`
+  `title`, `description`, and practical `topics`
 - keep topics practical and sparse; avoid turning front matter into a taxonomy
 - do not invent front matter just to satisfy `miku-indexgen`
 - keep the Markdown body readable without relying on front matter
@@ -317,7 +408,14 @@ Documented file entry fields include:
 - `dir`
 - `size`
 - optional `title`
+- optional `description`
 - optional `topics`
+- optional `category`
+- optional `status`
+- optional `audience`
+- optional `created`
+- optional `updated`
+- optional `sources`
 - optional `summary`
 
 See [index-json-spec.md](index-json-spec.md) for generated output structure.
@@ -328,18 +426,35 @@ When output is written into the input directory, generated `index.json` and
 optional `index.md` may exist beside source files. Treat these as generated
 artifacts, not hand-maintained source files.
 
+The output files for the current run are excluded from the generated `files[]`
+array when they are inside the scanned input tree. For example, generating
+`docs/index.json` and `docs/index.md` does not add those generated files to the
+new index.
+
 When an agent is asked to refresh them, rerun `miku-indexgen` instead of editing
 the generated files by hand.
+
+If `index.json` contains root `generation` metadata, it can be refreshed with:
+
+```bash
+miku-indexgen --refresh-index path/to/index.json
+```
+
+`--refresh-index` reads the stored generation conditions. It does not use stored
+`overwrite` or `verbose` values because those are runtime execution policies,
+not generation content.
 
 ## Agent Guidance
 
 When asked whether a file will be indexed, check:
 
 1. the selected `--input-directory`
-2. whether recursion is enabled
-3. whether `--include-ext` excludes the file extension
-4. whether the file is readable with the selected `--input-encoding`
-5. whether Markdown or JSON metadata extraction rules apply
+2. whether the file or one of its parent directories starts with `.`
+3. whether recursion is enabled
+4. whether `--include-ext` excludes the file extension
+5. whether the file is one of the current run's generated output files
+6. whether the file is readable with the selected `--input-encoding`
+7. whether Markdown or JSON metadata extraction rules apply
 
 When behavior is not documented here or in the upstream README, report it as
 `要確認` rather than inventing a rule.

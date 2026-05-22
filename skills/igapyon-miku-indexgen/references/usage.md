@@ -59,25 +59,25 @@ the user explicitly names `miku-indexgen` or `igapyon-miku-indexgen`.
 Generate `index.json`:
 
 ```bash
-java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.2.1.jar --input-directory docs
+java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.3.0.jar --input-directory docs
 ```
 
 Generate `index.json` and `index.md` into a separate directory:
 
 ```bash
-java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.2.1.jar --input-directory docs --output-directory workplace/indexgen --markdown
+java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.3.0.jar --input-directory docs --output-directory workplace/indexgen --markdown
 ```
 
 Use the Node.js runtime directly:
 
 ```bash
-node skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.2.0.mjs --input-directory docs --markdown
+node skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.3.0.1.mjs --input-directory docs --markdown
 ```
 
 Restrict scanned extensions:
 
 ```bash
-java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.2.1.jar --input-directory docs --include-ext md,json
+java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.3.0.jar --input-directory docs --include-ext md,json
 ```
 
 ## Developer Commands
@@ -110,12 +110,12 @@ The release zip is generated under `bundle/`.
 
 ## Runtime And Version Notes
 
-Agent Skill package version: `1.2.1`.
+Agent Skill package version: `1.3.0`.
 
 Bundled runtime artifacts:
 
-- `skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.2.0.mjs`
-- `skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.2.1.jar`
+- `skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.3.0.1.mjs`
+- `skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.3.0.jar`
 
 Runtime artifact file versions may differ between Node.js and Java artifacts.
 Use file-name versions for artifact selection and `--version` only as a smoke
