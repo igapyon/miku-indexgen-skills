@@ -11381,6 +11381,8 @@ Generated output:
   index.json contains title, generator, generation, basePath, and files[].
   files[] entries include name, path, ext, dir, size, optional Markdown
   metadata, and optional summary.
+  When outputs are written, the CLI reports aligned add   :, update:, or none  :
+  labels for each file.
 
 Markdown:
   - summary is extracted from the first heading or leading body text
@@ -11773,6 +11775,9 @@ function buildMarkdownIndexContent(files) {
 var GENERATOR_NAME = "miku-indexgen";
 var JSON_OUTPUT_FILE_NAME = "index.json";
 var MARKDOWN_OUTPUT_FILE_NAME = "index.md";
+function formatOutputStatus(status) {
+  return status.padEnd(6, " ");
+}
 function listVisibleEntries(dirPath) {
   return readdirSync(dirPath, { withFileTypes: true }).filter((entry) => !entry.name.startsWith(".")).sort((a, b) => a.name.localeCompare(b.name, "ja"));
 }
@@ -11796,6 +11801,19 @@ function countImmediateSubdirectories(targetPath) {
 }
 function shouldSkipExistingOutput(outputPath) {
   return statSync(outputPath, { throwIfNoEntry: false })?.isFile() === true;
+}
+function writeTextFileWithStatus(filePath, content, encoding) {
+  const existingFile = statSync(filePath, { throwIfNoEntry: false });
+  if (existingFile?.isFile() !== true) {
+    writeTextFile(filePath, content, encoding);
+    return "add";
+  }
+  const existingContent = readTextFile(filePath, encoding);
+  if (existingContent === content) {
+    return "none";
+  }
+  writeTextFile(filePath, content, encoding);
+  return "update";
 }
 function findExistingOutputPath(outputPaths, overwriteEnabled) {
   if (overwriteEnabled) {
@@ -11895,16 +11913,17 @@ function writeIndexOutputs(targetPath, files, options, outputPaths, timings) {
   const jsonContent = buildIndexContent(options.title, targetPath, files, outputPaths.jsonPath, options.includeGeneratorMetadata !== false, buildGenerationMetadata(options, targetPath, outputPaths.jsonPath));
   timings.jsonStringifyMs = performance.now() - jsonStringifyStart;
   const jsonWriteStart = performance.now();
-  writeTextFile(outputPaths.jsonPath, jsonContent, options.outputEncoding);
+  const jsonStatus = writeTextFileWithStatus(outputPaths.jsonPath, jsonContent, options.outputEncoding);
   timings.jsonWriteMs = performance.now() - jsonWriteStart;
-  console.log(`generated: ${outputPaths.jsonPath}`);
+  console.log(`${formatOutputStatus(jsonStatus)}: ${outputPaths.jsonPath}`);
   if (!outputPaths.markdownPath) {
     return;
   }
   const markdownStart = performance.now();
-  writeTextFile(outputPaths.markdownPath, buildMarkdownIndexContent(files), options.outputEncoding);
+  const markdownContent = buildMarkdownIndexContent(files);
+  const markdownStatus = writeTextFileWithStatus(outputPaths.markdownPath, markdownContent, options.outputEncoding);
   timings.markdownMs = performance.now() - markdownStart;
-  console.log(`generated: ${outputPaths.markdownPath}`);
+  console.log(`${formatOutputStatus(markdownStatus)}: ${outputPaths.markdownPath}`);
 }
 function createIndexes(options) {
   if (options.refreshIndex) {
@@ -11944,7 +11963,7 @@ function refreshIndex(options) {
 }
 
 // dist/version.js
-var VERSION = "1.3.0";
+var VERSION = "1.4.4";
 
 // dist/main.js
 function main() {
