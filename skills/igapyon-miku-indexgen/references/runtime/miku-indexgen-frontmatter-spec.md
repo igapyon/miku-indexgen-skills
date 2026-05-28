@@ -178,12 +178,12 @@ sources:
     role: primary
     checked: 2026-05-22
   - type: local-runtime
-    path: skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.3.0.jar
-    version: 1.3.0
+    path: skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.4.4.jar
+    version: 1.4.4
     role: verification
   - type: upstream-release
-    url: https://github.com/igapyon/miku-indexgen-java/releases/tag/v1.3.0
-    version: v1.3.0
+    url: https://github.com/igapyon/miku-indexgen-java/releases/tag/v1.4.4
+    version: v1.4.4
     role: supporting
     checked: 2026-05-22
 ```
