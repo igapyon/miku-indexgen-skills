@@ -62,10 +62,11 @@ directory, recursion setting, extension filters, encoding, and overwrite policy.
 - preserve `index.json` and `index.md` as inspectable file artifacts
 - update generated `index.json` by rerunning `miku-indexgen`, not by manual
   editing
-- in `miku-indexgen`-managed areas, treat supported Markdown front matter
-  (`title`, `topics`) as expected index metadata for Markdown files; add or
-  improve it during normal Markdown maintenance unless doing so would be noisy,
-  misleading, or outside the requested change
+- in `miku-indexgen`-managed areas, treat supported Markdown front matter as
+  agent-facing index metadata, not decoration; prefer `title`, `description`,
+  and practical `topics` for scan-time file selection, and add `category`,
+  `status`, `audience`, `created`, `updated`, or `sources` when they improve
+  routing, provenance, or maintenance decisions without adding noise
 - inspect command status and stderr before reporting success
 - keep diagnostics visible when the runtime reports warnings or expected
   failures
@@ -106,7 +107,7 @@ Primary operation:
 Common options:
 
 - `--input-directory <dir>`
-- `--input-parent-directory <dir>`: Java runtime only in the bundled 1.4.4
+- `--input-parent-directory <dir>`: Java runtime only in the bundled 1.5.1
   runtime set
 - `--refresh-index <index.json>`
 - `--output-directory <dir>`

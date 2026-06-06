@@ -26,13 +26,13 @@ Rejected decisions:
 
 Runtime artifacts were fetched from GitHub Releases:
 
-- `https://github.com/igapyon/miku-indexgen/releases/tag/v1.3.0.1`
-- `https://github.com/igapyon/miku-indexgen-java/releases/tag/v1.3.0`
+- `https://github.com/igapyon/miku-indexgen/releases/tag/v1.5.1`
+- `https://github.com/igapyon/miku-indexgen-java/releases/tag/v1.5.1`
 
 Expected SHA-256 digests:
 
-- `miku-indexgen-1.3.0.1.mjs`: `ba0b0696da36846c30810613412356f12091196c70b49cff538f53d0592c4421`
-- `miku-indexgen-1.3.0.jar`: `7374dbbe64c6bba88e87b0969a92463fba0f9a9e4c63f25bd431db087b707231`
+- `miku-indexgen-1.5.1.mjs`: `4f178dc0921bc712c73d71aa152857f81de9e779f2b07d6178d3d012a37b5fdd`
+- `miku-indexgen-1.5.1.jar`: `309f0aa1097e4e0fbaecda667930ca3761b9649731ee012915180be8dc0f1f20`
 
 ## Verification
 

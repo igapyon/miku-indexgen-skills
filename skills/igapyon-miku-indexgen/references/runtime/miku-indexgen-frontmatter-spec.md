@@ -85,6 +85,15 @@ Candidate fields:
 - `updated`: date when the document content was materially updated
 - `sources`: primary inputs used to create or materially update the document
 
+Generated index text is sanitized before it is written. Unicode is normalized
+to NFC, control characters and zero-width formatting characters are converted
+to spaces, whitespace runs are collapsed, and leading/trailing whitespace is
+trimmed.
+
+The bundled 1.5.1 runtime caps `description` at 256 UTF-16 code units. Longer
+descriptions are shortened to 253 code units plus `...` in generated
+`index.json`.
+
 Example:
 
 ```markdown
@@ -178,12 +187,12 @@ sources:
     role: primary
     checked: 2026-05-22
   - type: local-runtime
-    path: skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.4.4.jar
-    version: 1.4.4
+    path: skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.5.1.jar
+    version: 1.5.1
     role: verification
   - type: upstream-release
-    url: https://github.com/igapyon/miku-indexgen-java/releases/tag/v1.4.4
-    version: v1.4.4
+    url: https://github.com/igapyon/miku-indexgen-java/releases/tag/v1.5.1
+    version: v1.5.1
     role: supporting
     checked: 2026-05-22
 ```
