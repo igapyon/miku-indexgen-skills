@@ -131,6 +131,18 @@ themselves are excluded from `files[]`. For example, generating `docs/index.json
 and `docs/index.md` does not add those generated files to the new `files[]`
 array.
 
+## File Entry Ordering
+
+The `files[]` array is sorted by each entry's normalized relative `path`.
+
+Paths are normalized to POSIX-style `/` separators before they are written.
+Ordering uses UTF-16 code unit string comparison on those normalized path
+strings. Do not assume locale collation, natural sort, numeric sort, or
+case-insensitive ordering.
+
+The runtime also sorts visible directory entries by UTF-16 code unit order while
+scanning, but the final generated contract is the sorted `files[].path` order.
+
 ## Generation Metadata
 
 `generation` makes `index.json` self-describing enough to refresh.
@@ -204,6 +216,18 @@ When present and supported by the runtime, documented metadata fields may appear
 in the file entry. Core fields include `title`, `description`, `topics`,
 `category`, `status`, `audience`, `created`, `updated`, and `sources`.
 
+Metadata string values are normalized for generated indexes: Unicode is
+normalized to NFC, control characters and zero-width formatting characters are
+converted to spaces, whitespace runs are collapsed, and leading/trailing
+whitespace is trimmed.
+
+Markdown front matter `description` is capped at 256 UTF-16 code units. When it
+is longer, the runtime writes the first 253 code units followed by `...`.
+
+Markdown body summaries are also capped at 256 UTF-16 code units when extracted
+from leading body text. A first heading summary is sanitized, but is not
+shortened by the body-text cap in the bundled 1.5.1 runtime.
+
 ## JSON Summary Extraction
 
 For JSON files, `summary` is omitted by default.
@@ -211,6 +235,10 @@ For JSON files, `summary` is omitted by default.
 When `--json-summary-path <paths>` is specified, each path is treated as a JSON
 Pointer. The runtime evaluates the comma-separated paths from left to right and
 uses the first matching string value as `summary`.
+
+JSON summaries are capped at 256 UTF-16 code units before sanitization. This
+cap does not append `...`; it keeps the first 256 code units and then applies
+the same index text sanitization.
 
 Example:
 

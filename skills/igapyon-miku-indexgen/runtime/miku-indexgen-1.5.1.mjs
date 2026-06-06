@@ -11169,6 +11169,15 @@ function writeTextFile(filePath, content, encoding) {
 function sanitizeTextForIndex(text) {
   return text.normalize("NFC").replace(/[\u0000-\u0008\u000B-\u001F\u007F-\u009F]/g, " ").replace(/[\u200B-\u200D\u2060\uFEFF]/g, " ").replace(/[\r\n\t]/g, " ").replace(/\s+/g, " ").trim();
 }
+function truncateTextForIndex(text, maxLength = 256, omission = "...") {
+  if (text.length <= maxLength) {
+    return text;
+  }
+  if (maxLength <= omission.length) {
+    return omission.slice(0, maxLength);
+  }
+  return `${text.slice(0, maxLength - omission.length)}${omission}`;
+}
 
 // dist/json-summary.js
 var DEFAULT_MAX_SUMMARY_LENGTH = 256;
@@ -11381,13 +11390,19 @@ Generated output:
   index.json contains title, generator, generation, basePath, and files[].
   files[] entries include name, path, ext, dir, size, optional Markdown
   metadata, and optional summary.
+  files[] is sorted by normalized relative path using UTF-16 code unit order.
   When outputs are written, the CLI reports aligned add   :, update:, or none  :
   labels for each file.
 
 Markdown:
   - summary is extracted from the first heading or leading body text
   - front matter is parsed as YAML
-  - only documented metadata fields are copied into index.json
+  - supported fields: title, description, topics, category, status, audience,
+    created, updated, sources
+  - title, description, and topics are primary scan-time file selection signals
+  - category, status, and audience help route which files to read next
+  - sources, created, and updated help judge provenance and freshness
+  - description is capped at 256 UTF-16 code units and may end with "..."
   - unknown fields and unsupported shapes are ignored
 
 JSON:
@@ -11433,6 +11448,7 @@ import { performance } from "node:perf_hooks";
 // dist/frontmatter.js
 var import_yaml = __toESM(require_dist(), 1);
 var DATE_ONLY_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
+var DESCRIPTION_MAX_LENGTH = 256;
 function isRecord(value) {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
@@ -11445,6 +11461,10 @@ function sanitizeMetadataString(value) {
     return value.toISOString().slice(0, 10);
   }
   return void 0;
+}
+function sanitizeDescription(value) {
+  const sanitized = sanitizeMetadataString(value);
+  return sanitized ? truncateTextForIndex(sanitized, DESCRIPTION_MAX_LENGTH) : void 0;
 }
 function sanitizeDateOnly(value) {
   const sanitized = sanitizeMetadataString(value);
@@ -11499,7 +11519,7 @@ function parseFrontMatterMetadata(frontMatter) {
     return {};
   }
   const title = sanitizeMetadataString(parsed.title);
-  const description = sanitizeMetadataString(parsed.description);
+  const description = sanitizeDescription(parsed.description);
   const topics = sanitizeStringArray(parsed.topics);
   const category = sanitizeMetadataString(parsed.category);
   const status = sanitizeMetadataString(parsed.status);
@@ -11559,6 +11579,15 @@ function getFileExtension(filePath) {
 }
 function getFileName(filePath) {
   return basename(filePath);
+}
+function compareUtf16CodeUnitStrings(a, b) {
+  if (a < b) {
+    return -1;
+  }
+  if (a > b) {
+    return 1;
+  }
+  return 0;
 }
 
 // dist/generation.js
@@ -11779,7 +11808,7 @@ function formatOutputStatus(status) {
   return status.padEnd(6, " ");
 }
 function listVisibleEntries(dirPath) {
-  return readdirSync(dirPath, { withFileTypes: true }).filter((entry) => !entry.name.startsWith(".")).sort((a, b) => a.name.localeCompare(b.name, "ja"));
+  return readdirSync(dirPath, { withFileTypes: true }).filter((entry) => !entry.name.startsWith(".")).sort((a, b) => compareUtf16CodeUnitStrings(a.name, b.name));
 }
 function collectIndexableFiles(dirPath, recursive, includeExtensions) {
   const allowedExtensions = new Set(includeExtensions);
@@ -11904,7 +11933,7 @@ function collectIndexFiles(targetPath, options, outputPaths, timings, logger) {
     logger.log(`found-file=${file.path}`);
     return file;
   });
-  files.sort((a, b) => a.path.localeCompare(b.path, "ja"));
+  files.sort((a, b) => compareUtf16CodeUnitStrings(a.path, b.path));
   return files;
 }
 function writeIndexOutputs(targetPath, files, options, outputPaths, timings) {
@@ -11963,7 +11992,7 @@ function refreshIndex(options) {
 }
 
 // dist/version.js
-var VERSION = "1.4.4";
+var VERSION = "1.5.1";
 
 // dist/main.js
 function main() {

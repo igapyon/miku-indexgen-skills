@@ -41,6 +41,36 @@ Generated outputs:
 maintained by hand. When the source directory changes or the index needs to be
 refreshed, rerun `miku-indexgen`.
 
+## Markdown Front Matter Strategy
+
+Markdown front matter is the author-controlled signal that makes generated
+indexes useful before an agent reads full files.
+
+When maintaining Markdown in a `miku-indexgen`-managed area, prefer concise
+front matter that helps an agent decide what to read:
+
+- `title`: stable human-readable document name
+- `description`: short purpose statement; generated output is capped at 256
+  UTF-16 code units and may end with `...`
+- `topics`: practical search and grouping terms
+- `category`: document kind, such as `reference`, `guide`, `workflow`,
+  `example`, `template`, or `spec`
+- `status`: document state, such as `draft`, `stable`, or `deprecated`
+- `audience`: intended readers, such as `agent`, `user`, `maintainer`, or
+  `developer`
+- `created` and `updated`: date-only maintenance signals
+- `sources`: provenance for upstream docs, release artifacts, local runtimes,
+  generated outputs, manual verification, or human input
+
+Callers should treat these fields in `index.json` as routing metadata. Use
+`title`, `description`, `topics`, `category`, `status`, and `audience` to choose
+which files to read next. Use `sources`, `created`, and `updated` to judge
+provenance and freshness. Do not rely on unknown front matter fields appearing
+in generated indexes.
+
+Detailed field rules are documented in
+[runtime/miku-indexgen-frontmatter-spec.md](runtime/miku-indexgen-frontmatter-spec.md).
+
 ## Agent Requests
 
 Examples:
@@ -59,62 +89,62 @@ the user explicitly names `miku-indexgen` or `igapyon-miku-indexgen`.
 Generate `index.json`:
 
 ```bash
-java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.4.4.jar --input-directory docs
+java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.5.1.jar --input-directory docs
 ```
 
 Generate an index with a root title:
 
 ```bash
-java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.4.4.jar --input-directory docs --title "Docs Index"
+java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.5.1.jar --input-directory docs --title "Docs Index"
 ```
 
 Refresh an existing generated `index.json` from its stored generation metadata:
 
 ```bash
-java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.4.4.jar --refresh-index docs/index.json
+java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.5.1.jar --refresh-index docs/index.json
 ```
 
 Generate indexes for each direct visible child directory. This is a Java
-runtime feature in the bundled 1.4.4 runtime set:
+runtime feature in the bundled 1.5.1 runtime set:
 
 ```bash
-java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.4.4.jar --input-parent-directory docs-parent --output-directory workplace/indexgen --markdown
+java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.5.1.jar --input-parent-directory docs-parent --output-directory workplace/indexgen --markdown
 ```
 
 Generate `index.json` and `index.md` into a separate directory:
 
 ```bash
-java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.4.4.jar --input-directory docs --output-directory workplace/indexgen --markdown
+java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.5.1.jar --input-directory docs --output-directory workplace/indexgen --markdown
 ```
 
 Use the Node.js runtime directly:
 
 ```bash
-node skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.4.4.mjs --input-directory docs --markdown
+node skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.5.1.mjs --input-directory docs --markdown
 ```
 
 Restrict scanned extensions:
 
 ```bash
-java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.4.4.jar --input-directory docs --include-ext md,json
+java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.5.1.jar --input-directory docs --include-ext md,json
 ```
 
 Extract JSON summaries from the first matching JSON Pointer:
 
 ```bash
-java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.4.4.jar --input-directory docs --json-summary-path /title,/name
+java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.5.1.jar --input-directory docs --json-summary-path /title,/name
 ```
 
 Avoid overwriting existing generated files:
 
 ```bash
-java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.4.4.jar --input-directory docs --no-overwrite
+java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.5.1.jar --input-directory docs --no-overwrite
 ```
 
 Read and write Shift_JIS text:
 
 ```bash
-java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.4.4.jar --input-directory docs --input-encoding shift_jis --output-encoding shift_jis
+java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.5.1.jar --input-directory docs --input-encoding shift_jis --output-encoding shift_jis
 ```
 
 ## Developer Commands
@@ -146,19 +176,19 @@ mvn generate-resources
 Refresh the skill-local index directly:
 
 ```bash
-java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.4.4.jar --refresh-index skills/igapyon-miku-indexgen/index.json
+java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.5.1.jar --refresh-index skills/igapyon-miku-indexgen/index.json
 ```
 
 The release zip is generated under `bundle/`.
 
 ## Runtime And Version Notes
 
-Agent Skill package version: `1.4.4`.
+Agent Skill package version: `1.5.1`.
 
 Bundled runtime artifacts:
 
-- `skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.4.4.mjs`
-- `skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.4.4.jar`
+- `skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.5.1.mjs`
+- `skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.5.1.jar`
 
 Runtime artifact file versions may differ between Node.js and Java artifacts.
 Use file-name versions for artifact selection and `--version` only as a smoke

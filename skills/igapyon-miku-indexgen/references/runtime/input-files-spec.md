@@ -206,6 +206,17 @@ topics:
 Do not assume that arbitrary YAML fields become `index.json` fields. Only rely
 on fields documented by the runtime and the generated output specification.
 
+Extracted text is sanitized for index output. The runtime normalizes Unicode to
+NFC, replaces control characters and zero-width formatting characters with
+spaces, collapses whitespace runs, and trims leading/trailing whitespace.
+
+The bundled 1.5.1 runtime caps front matter `description` at 256 UTF-16 code
+units. Longer descriptions are shortened to 253 code units plus `...`.
+
+Markdown `summary` extracted from leading body text is capped at 256 UTF-16
+code units without appending `...`. When `summary` comes from the first heading,
+the heading text is sanitized but is not shortened by that body-text cap.
+
 ## Supported Front Matter Syntax
 
 `miku-indexgen` recognizes front matter only when it appears at the start of a
@@ -395,6 +406,9 @@ miku-indexgen --input-directory references --json-summary-path /frontmatter/titl
 The runtime evaluates paths from left to right and uses the first matching
 string value as `summary`.
 
+JSON summaries are capped at 256 UTF-16 code units before sanitization. Unlike
+front matter `description`, this cap does not append `...`.
+
 ## File Metadata
 
 For each indexed file, `miku-indexgen` records file-level metadata in
@@ -419,6 +433,11 @@ Documented file entry fields include:
 - optional `summary`
 
 See [index-json-spec.md](index-json-spec.md) for generated output structure.
+
+Generated `files[]` entries are sorted by normalized relative `path` using
+UTF-16 code unit string comparison. Paths are written with POSIX-style `/`
+separators. Do not assume locale, natural, numeric, or case-insensitive sort
+order.
 
 ## Generated Files As Inputs
 
