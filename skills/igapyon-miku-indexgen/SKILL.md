@@ -107,7 +107,7 @@ Primary operation:
 Common options:
 
 - `--input-directory <dir>`
-- `--input-parent-directory <dir>`: Java runtime only in the bundled 1.5.1
+- `--input-parent-directory <dir>`: Java runtime only in the bundled 1.6.0
   runtime set
 - `--refresh-index <index.json>`
 - `--output-directory <dir>`
@@ -118,6 +118,7 @@ Common options:
 - `--no-recursive`
 - `--no-overwrite`
 - `--include-ext <exts>`
+- `--exclude-glob <pattern>`
 - `--input-encoding <encoding>`
 - `--output-encoding <encoding>`
 - `--verbose`

@@ -77,6 +77,7 @@ Example shape:
   "markdownOutput": true,
   "recursive": true,
   "includeExtensions": ["md", "json"],
+  "excludeGlobs": ["**/images/*"],
   "inputEncoding": "utf8",
   "outputEncoding": "utf8",
   "title": "Docs Index",
@@ -155,6 +156,7 @@ Fields:
 - `markdownOutput`: whether `index.md` should also be generated
 - `recursive`: whether subdirectories are scanned
 - `includeExtensions`: indexed file extensions
+- `excludeGlobs`: optional input-relative POSIX path glob exclusion patterns
 - `inputEncoding`: input text encoding
 - `outputEncoding`: output text encoding
 - `jsonSummaryPaths`: optional JSON Pointer path list for JSON summaries
@@ -226,7 +228,7 @@ is longer, the runtime writes the first 253 code units followed by `...`.
 
 Markdown body summaries are also capped at 256 UTF-16 code units when extracted
 from leading body text. A first heading summary is sanitized, but is not
-shortened by the body-text cap in the bundled 1.5.1 runtime.
+shortened by the body-text cap in the bundled 1.6.0 runtime.
 
 ## JSON Summary Extraction
 

@@ -139,6 +139,22 @@ leading dot, so `.md,JSON` is treated like `md,json`.
 
 When `--include-ext` is omitted, the default extension list is `md,json`.
 
+## Path Exclusion
+
+Use `--exclude-glob <pattern>` to exclude input-relative POSIX paths after
+extension filtering.
+
+Example:
+
+```bash
+miku-indexgen --input-directory docs --include-ext md --exclude-glob "**/images/*" --exclude-glob "**/section-text.md"
+```
+
+`--exclude-glob` is repeatable. Separators are normalized to `/`, matching is
+case-sensitive, and the supported syntax is limited to `*`, `?`, and `**`.
+Character classes, brace expansion, extglob, regular expressions, and
+OS-dependent separators are not supported.
+
 ## Input Encoding
 
 Use `--input-encoding <encoding>` to choose how text input is read.
@@ -210,7 +226,7 @@ Extracted text is sanitized for index output. The runtime normalizes Unicode to
 NFC, replaces control characters and zero-width formatting characters with
 spaces, collapses whitespace runs, and trims leading/trailing whitespace.
 
-The bundled 1.5.1 runtime caps front matter `description` at 256 UTF-16 code
+The bundled 1.6.0 runtime caps front matter `description` at 256 UTF-16 code
 units. Longer descriptions are shortened to 253 code units plus `...`.
 
 Markdown `summary` extracted from leading body text is capped at 256 UTF-16

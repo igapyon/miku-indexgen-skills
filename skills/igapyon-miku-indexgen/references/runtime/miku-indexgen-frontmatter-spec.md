@@ -90,7 +90,7 @@ to NFC, control characters and zero-width formatting characters are converted
 to spaces, whitespace runs are collapsed, and leading/trailing whitespace is
 trimmed.
 
-The bundled 1.5.1 runtime caps `description` at 256 UTF-16 code units. Longer
+The bundled 1.6.0 runtime caps `description` at 256 UTF-16 code units. Longer
 descriptions are shortened to 253 code units plus `...` in generated
 `index.json`.
 
@@ -185,16 +185,16 @@ sources:
   - type: human-input
     label: user-provided front matter design requirements
     role: primary
-    checked: 2026-05-22
+    checked: 2026-06-20
   - type: local-runtime
-    path: skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.5.1.jar
-    version: 1.5.1
+    path: skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.0.jar
+    version: 1.6.0
     role: verification
   - type: upstream-release
-    url: https://github.com/igapyon/miku-indexgen-java/releases/tag/v1.5.1
-    version: v1.5.1
+    url: https://github.com/igapyon/miku-indexgen-java/releases/tag/v1.6.0
+    version: v1.6.0
     role: supporting
-    checked: 2026-05-22
+    checked: 2026-06-20
 ```
 
 `sources` is an intentional exception to the shallow-field preference. It is

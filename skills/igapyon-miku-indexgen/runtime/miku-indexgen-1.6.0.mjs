@@ -11165,6 +11165,59 @@ function writeTextFile(filePath, content, encoding) {
   writeFileSync(filePath, import_iconv_lite.default.encode(content, encoding));
 }
 
+// dist/glob.js
+function normalizeExcludeGlobPattern(pattern) {
+  return pattern.split("\\").join("/").replace(/^\/+/, "").replace(/\/+$/, "");
+}
+function normalizeExcludeGlobPatterns(patterns) {
+  const normalized = patterns.map((pattern) => normalizeExcludeGlobPattern(pattern.trim())).filter((pattern) => pattern.length > 0);
+  return [...new Set(normalized)];
+}
+function matchesAnyExcludeGlob(relativePath, patterns) {
+  if (!patterns || patterns.length === 0) {
+    return false;
+  }
+  const normalizedPath = relativePath.split("\\").join("/").replace(/^\/+/, "");
+  return patterns.some((pattern) => matchesExcludeGlob(normalizedPath, pattern));
+}
+function matchesExcludeGlob(relativePath, pattern) {
+  const pathSegments = relativePath.split("/").filter((segment) => segment.length > 0);
+  const patternSegments = normalizeExcludeGlobPattern(pattern).split("/").filter((segment) => segment.length > 0);
+  return matchSegments(pathSegments, patternSegments, 0, 0);
+}
+function matchSegments(pathSegments, patternSegments, pathIndex, patternIndex) {
+  if (patternIndex === patternSegments.length) {
+    return pathIndex === pathSegments.length;
+  }
+  const patternSegment = patternSegments[patternIndex];
+  if (patternSegment === "**") {
+    if (matchSegments(pathSegments, patternSegments, pathIndex, patternIndex + 1)) {
+      return true;
+    }
+    return pathIndex < pathSegments.length && matchSegments(pathSegments, patternSegments, pathIndex + 1, patternIndex);
+  }
+  return pathIndex < pathSegments.length && matchesPathSegment(pathSegments[pathIndex], patternSegment) && matchSegments(pathSegments, patternSegments, pathIndex + 1, patternIndex + 1);
+}
+function matchesPathSegment(pathSegment, patternSegment) {
+  return matchSegmentChars(pathSegment, patternSegment, 0, 0);
+}
+function matchSegmentChars(value, pattern, valueIndex, patternIndex) {
+  if (patternIndex === pattern.length) {
+    return valueIndex === value.length;
+  }
+  const patternChar = pattern[patternIndex];
+  if (patternChar === "*") {
+    if (matchSegmentChars(value, pattern, valueIndex, patternIndex + 1)) {
+      return true;
+    }
+    return valueIndex < value.length && matchSegmentChars(value, pattern, valueIndex + 1, patternIndex);
+  }
+  if (patternChar === "?") {
+    return valueIndex < value.length && matchSegmentChars(value, pattern, valueIndex + 1, patternIndex + 1);
+  }
+  return valueIndex < value.length && value[valueIndex] === patternChar && matchSegmentChars(value, pattern, valueIndex + 1, patternIndex + 1);
+}
+
 // dist/text-sanitize.js
 function sanitizeTextForIndex(text) {
   return text.normalize("NFC").replace(/[\u0000-\u0008\u000B-\u001F\u007F-\u009F]/g, " ").replace(/[\u200B-\u200D\u2060\uFEFF]/g, " ").replace(/[\r\n\t]/g, " ").replace(/\s+/g, " ").trim();
@@ -11275,6 +11328,7 @@ function parseArgs(argv) {
   let overwrite = true;
   let verbose = false;
   let includeExtensions = [...DEFAULT_INCLUDE_EXTENSIONS];
+  const excludeGlobs = [];
   let inputEncoding = DEFAULT_TEXT_ENCODING;
   let outputEncoding = DEFAULT_TEXT_ENCODING;
   for (let i = 0; i < argv.length; i += 1) {
@@ -11325,6 +11379,11 @@ function parseArgs(argv) {
       i += 1;
       continue;
     }
+    if (arg === "--exclude-glob") {
+      excludeGlobs.push(readRequiredOptionValue(argv, i, "--exclude-glob", "a glob pattern"));
+      i += 1;
+      continue;
+    }
     if (arg === "--input-encoding") {
       inputEncoding = parseEncodingOption(readRequiredOptionValue(argv, i, "--input-encoding", "an encoding"));
       i += 1;
@@ -11362,6 +11421,7 @@ function parseArgs(argv) {
     overwrite,
     verbose,
     includeExtensions,
+    excludeGlobs: normalizeExcludeGlobPatterns(excludeGlobs),
     inputEncoding,
     outputEncoding
   };
@@ -11370,7 +11430,7 @@ function parseArgs(argv) {
 // dist/help.js
 function printHelp() {
   console.log(`Usage:
-  miku-indexgen --input-directory <dir> [--output-directory <dir>] [--title "Docs Index"] [--markdown] [--no-generator] [--json-summary-path /title,/name] [--no-recursive] [--no-overwrite] [--include-ext md,json] [--input-encoding utf8] [--output-encoding utf8] [--verbose]
+  miku-indexgen --input-directory <dir> [--output-directory <dir>] [--title "Docs Index"] [--markdown] [--no-generator] [--json-summary-path /title,/name] [--no-recursive] [--no-overwrite] [--include-ext md,json] [--exclude-glob "**/images/*"] [--input-encoding utf8] [--output-encoding utf8] [--verbose]
   miku-indexgen --refresh-index <index.json> [--no-overwrite] [--verbose]
 
 Description:
@@ -11381,10 +11441,18 @@ Description:
 Default behavior:
   - recursively scans the input directory
   - indexes md,json files by default
+  - applies --exclude-glob after extension filtering
   - skips files and directories starting with "."
   - writes outputs under the input directory unless --output-directory is set
   - excludes the current run's index.json/index.md from files[]
   - stores generation metadata in index.json for later refresh
+
+Exclude glob:
+  --exclude-glob is evaluated against paths relative to the input directory
+  after --include-ext. Separators are normalized to "/". Matching is
+  case-sensitive. Supported glob syntax is only *, ?, and **. Character
+  classes, brace expansion, extglob, regular expressions, and OS-dependent
+  separators are not supported.
 
 Generated output:
   index.json contains title, generator, generation, basePath, and files[].
@@ -11420,6 +11488,8 @@ Options:
   --no-recursive                Scan only immediate files.
   --no-overwrite                Skip if output already exists.
   --include-ext <exts>          Comma-separated extensions. Default: md,json.
+  --exclude-glob <pattern>      Exclude input-relative POSIX paths matching * ? **.
+                                Repeatable. Stored in generation metadata.
   --input-encoding <encoding>   utf8 or shift_jis. Default: utf8.
   --output-encoding <encoding>  utf8 or shift_jis. Default: utf8.
   --verbose                     Print progress and timing details.
@@ -11431,6 +11501,7 @@ Examples:
   miku-indexgen --input-directory docs --markdown
   miku-indexgen --input-directory docs --output-directory workplace --markdown
   miku-indexgen --input-directory docs --json-summary-path /title,/name
+  miku-indexgen --input-directory docs --include-ext md --exclude-glob "**/images/*" --exclude-glob "**/section-text.md"
   miku-indexgen --refresh-index workplace/index.json
 
 References:
@@ -11593,12 +11664,14 @@ function compareUtf16CodeUnitStrings(a, b) {
 // dist/generation.js
 function buildGenerationMetadata(options, targetPath, outputPath) {
   const jsonSummaryPaths = options.jsonSummaryPaths && options.jsonSummaryPaths.length > 0 ? options.jsonSummaryPaths : void 0;
+  const excludeGlobs = options.excludeGlobs && options.excludeGlobs.length > 0 ? normalizeExcludeGlobPatterns(options.excludeGlobs) : void 0;
   return {
     schemaVersion: 1,
     inputPath: toPosixPath(relative(dirname(outputPath), targetPath)) || ".",
     markdownOutput: options.markdownOutput,
     recursive: options.recursive,
     includeExtensions: options.includeExtensions,
+    ...excludeGlobs ? { excludeGlobs } : {},
     inputEncoding: options.inputEncoding,
     outputEncoding: options.outputEncoding,
     ...jsonSummaryPaths ? { jsonSummaryPaths } : {},
@@ -11639,6 +11712,7 @@ function buildRefreshOptions(options, indexPath) {
     overwrite: options.overwrite,
     verbose: options.verbose,
     includeExtensions: generation.includeExtensions,
+    excludeGlobs: generation.excludeGlobs,
     inputEncoding: generation.inputEncoding,
     outputEncoding: generation.outputEncoding
   };
@@ -11651,7 +11725,7 @@ function isGenerationMetadata(value) {
     return false;
   }
   const generation = value;
-  return generation.schemaVersion === 1 && typeof generation.inputPath === "string" && typeof generation.markdownOutput === "boolean" && typeof generation.recursive === "boolean" && isStringArray(generation.includeExtensions) && typeof generation.inputEncoding === "string" && typeof generation.outputEncoding === "string" && (generation.jsonSummaryPaths === void 0 || isStringArray(generation.jsonSummaryPaths)) && (generation.title === void 0 || typeof generation.title === "string") && typeof generation.includeGeneratorMetadata === "boolean";
+  return generation.schemaVersion === 1 && typeof generation.inputPath === "string" && typeof generation.markdownOutput === "boolean" && typeof generation.recursive === "boolean" && isStringArray(generation.includeExtensions) && typeof generation.inputEncoding === "string" && typeof generation.outputEncoding === "string" && (generation.excludeGlobs === void 0 || isStringArray(generation.excludeGlobs)) && (generation.jsonSummaryPaths === void 0 || isStringArray(generation.jsonSummaryPaths)) && (generation.title === void 0 || typeof generation.title === "string") && typeof generation.includeGeneratorMetadata === "boolean";
 }
 
 // dist/index-json.js
@@ -11926,7 +12000,7 @@ function collectIndexableFilesWithSet(dirPath, recursive, includeExtensions, ent
 function collectIndexFiles(targetPath, options, outputPaths, timings, logger) {
   logger.log("scanning-dir=.");
   const collectStart = performance.now();
-  const indexableFiles = collectIndexableFiles(targetPath, options.recursive, options.includeExtensions).filter((filePath) => !isGeneratedOutputPath(filePath, outputPaths));
+  const indexableFiles = collectIndexableFiles(targetPath, options.recursive, options.includeExtensions).filter((filePath) => !isGeneratedOutputPath(filePath, outputPaths)).filter((filePath) => !matchesAnyExcludeGlob(toPosixPath(relative2(targetPath, filePath)), options.excludeGlobs));
   timings.collectMs += performance.now() - collectStart;
   const files = indexableFiles.map((filePath) => {
     const file = buildIndexFile(filePath, targetPath, options.inputEncoding, options.jsonSummaryPaths, timings);
@@ -11992,7 +12066,7 @@ function refreshIndex(options) {
 }
 
 // dist/version.js
-var VERSION = "1.5.1";
+var VERSION = "1.6.0";
 
 // dist/main.js
 function main() {
