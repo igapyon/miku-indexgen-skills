@@ -11,10 +11,10 @@ test("resolves bundled runtime artifacts", () => {
   const javaArtifact = resolveRuntimeArtifact({ kind: "java" });
   const nodeArtifact = resolveRuntimeArtifact({ kind: "node" });
 
-  assert.equal(javaArtifact.name, "miku-indexgen-1.5.1.jar");
-  assert.equal(javaArtifact.version, "1.5.1");
-  assert.equal(nodeArtifact.name, "miku-indexgen-1.5.1.mjs");
-  assert.equal(nodeArtifact.version, "1.5.1");
+  assert.equal(javaArtifact.name, "miku-indexgen-1.6.0.jar");
+  assert.equal(javaArtifact.version, "1.6.0");
+  assert.equal(nodeArtifact.name, "miku-indexgen-1.6.0.mjs");
+  assert.equal(nodeArtifact.version, "1.6.0");
 
   assert.equal(fs.existsSync(resolveRuntimeArtifactPath({ kind: "java" })), true);
   assert.equal(fs.existsSync(resolveRuntimeArtifactPath({ kind: "node" })), true);
