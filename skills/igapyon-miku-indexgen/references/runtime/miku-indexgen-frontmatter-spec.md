@@ -90,7 +90,7 @@ to NFC, control characters and zero-width formatting characters are converted
 to spaces, whitespace runs are collapsed, and leading/trailing whitespace is
 trimmed.
 
-The bundled 1.6.0 runtime caps `description` at 256 UTF-16 code units. Longer
+The bundled runtimes cap `description` at 256 UTF-16 code units. Longer
 descriptions are shortened to 253 code units plus `...` in generated
 `index.json`.
 

@@ -71,7 +71,7 @@ java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.0.jar --input-d
 Use the Node.js runtime directly:
 
 ```bash
-node skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.0.mjs --input-directory docs --markdown
+node skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.1.mjs --input-directory docs --markdown
 ```
 
 Exclude input-relative paths:
@@ -110,16 +110,16 @@ The release zip is generated under `bundle/`.
 
 ## Runtime Artifacts
 
-Agent Skill package version: `1.6.0`.
+Agent Skill package version: `1.6.1`.
 
 This repository bundles upstream GitHub Release artifacts:
 
-- `skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.0.mjs`
+- `skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.1.mjs`
 - `skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.0.jar`
 
 Upstream anchors:
 
-- `igapyon/miku-indexgen` release `v1.6.0`
+- `igapyon/miku-indexgen` release `v1.6.1`
 - `igapyon/miku-indexgen-java` release `v1.6.0`
 
 Runtime artifact file versions may differ between Node.js and Java artifacts. Use file-name versions for artifact selection and `--version` only as a smoke check that the runtime starts.

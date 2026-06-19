@@ -11318,6 +11318,7 @@ function readRequiredOptionValue(argv, index, optionName, description) {
 }
 function parseArgs(argv) {
   let inputDirectory;
+  let inputParentDirectory;
   let outputDirectory;
   let refreshIndex2;
   let title;
@@ -11335,6 +11336,11 @@ function parseArgs(argv) {
     const arg = argv[i];
     if (arg === "--input-directory") {
       inputDirectory = readRequiredOptionValue(argv, i, "--input-directory", "an input directory");
+      i += 1;
+      continue;
+    }
+    if (arg === "--input-parent-directory") {
+      inputParentDirectory = readRequiredOptionValue(argv, i, "--input-parent-directory", "an input parent directory");
       i += 1;
       continue;
     }
@@ -11406,11 +11412,16 @@ function parseArgs(argv) {
     }
     throw new Error(`Unknown argument: ${arg}`);
   }
-  if (!inputDirectory && !refreshIndex2) {
-    throw new Error("Please specify an input directory with --input-directory.");
+  const inputModes = [inputDirectory, inputParentDirectory, refreshIndex2].filter((value) => value !== void 0).length;
+  if (inputModes > 1) {
+    throw new Error("Specify only one of --input-directory, --input-parent-directory, or --refresh-index.");
+  }
+  if (inputModes === 0) {
+    throw new Error("Please specify --input-directory, --input-parent-directory, or --refresh-index.");
   }
   return {
     inputDirectory: inputDirectory ?? "",
+    inputParentDirectory,
     outputDirectory,
     refreshIndex: refreshIndex2,
     title,
@@ -11431,6 +11442,7 @@ function parseArgs(argv) {
 function printHelp() {
   console.log(`Usage:
   miku-indexgen --input-directory <dir> [--output-directory <dir>] [--title "Docs Index"] [--markdown] [--no-generator] [--json-summary-path /title,/name] [--no-recursive] [--no-overwrite] [--include-ext md,json] [--exclude-glob "**/images/*"] [--input-encoding utf8] [--output-encoding utf8] [--verbose]
+  miku-indexgen --input-parent-directory <dir> [--output-directory <dir>] [--title "Docs Index"] [--markdown] [--no-generator] [--json-summary-path /title,/name] [--no-recursive] [--no-overwrite] [--include-ext md,json] [--exclude-glob "**/images/*"] [--input-encoding utf8] [--output-encoding utf8] [--verbose]
   miku-indexgen --refresh-index <index.json> [--no-overwrite] [--verbose]
 
 Description:
@@ -11446,6 +11458,13 @@ Default behavior:
   - writes outputs under the input directory unless --output-directory is set
   - excludes the current run's index.json/index.md from files[]
   - stores generation metadata in index.json for later refresh
+
+Child-directory batch mode:
+  --input-parent-directory processes each direct visible child directory as an
+  independent input base. Direct child files are ignored. With a shared
+  --output-directory, outputs are written under child-specific directories.
+  Child failures are aggregated; remaining children are still processed and
+  the command exits non-zero when any child fails.
 
 Exclude glob:
   --exclude-glob is evaluated against paths relative to the input directory
@@ -11478,28 +11497,30 @@ JSON:
   - use --json-summary-path /title,/name to extract the first matching string
 
 Options:
-  --input-directory <dir>       Directory to scan.
-  --refresh-index <index.json>  Regenerate an existing index from generation metadata.
-  --output-directory <dir>      Directory for index.json and optional index.md.
-  --title <text>                Root title in index.json.
-  --markdown                    Also generate index.md.
-  --no-generator                Omit root generator metadata.
-  --json-summary-path <paths>   Comma-separated JSON Pointer paths.
-  --no-recursive                Scan only immediate files.
-  --no-overwrite                Skip if output already exists.
-  --include-ext <exts>          Comma-separated extensions. Default: md,json.
-  --exclude-glob <pattern>      Exclude input-relative POSIX paths matching * ? **.
-                                Repeatable. Stored in generation metadata.
-  --input-encoding <encoding>   utf8 or shift_jis. Default: utf8.
-  --output-encoding <encoding>  utf8 or shift_jis. Default: utf8.
-  --verbose                     Print progress and timing details.
-  --version                     Print version.
-  --help                        Print this help.
+  --input-directory <dir>        Directory to scan.
+  --input-parent-directory <dir> Process direct child directories independently.
+  --refresh-index <index.json>   Regenerate an existing index from generation metadata.
+  --output-directory <dir>       Directory for index.json and optional index.md.
+  --title <text>                 Root title in index.json.
+  --markdown                     Also generate index.md.
+  --no-generator                 Omit root generator metadata.
+  --json-summary-path <paths>    Comma-separated JSON Pointer paths.
+  --no-recursive                 Scan only immediate files.
+  --no-overwrite                 Skip if output already exists.
+  --include-ext <exts>           Comma-separated extensions. Default: md,json.
+  --exclude-glob <pattern>       Exclude input-relative POSIX paths matching * ? **.
+                                 Repeatable. Stored in generation metadata.
+  --input-encoding <encoding>    utf8 or shift_jis. Default: utf8.
+  --output-encoding <encoding>   utf8 or shift_jis. Default: utf8.
+  --verbose                      Print progress and timing details.
+  --version                      Print version.
+  --help                         Print this help.
 
 Examples:
   miku-indexgen --input-directory docs
   miku-indexgen --input-directory docs --markdown
   miku-indexgen --input-directory docs --output-directory workplace --markdown
+  miku-indexgen --input-parent-directory docs-parent --output-directory out --markdown
   miku-indexgen --input-directory docs --json-summary-path /title,/name
   miku-indexgen --input-directory docs --include-ext md --exclude-glob "**/images/*" --exclude-glob "**/section-text.md"
   miku-indexgen --refresh-index workplace/index.json
@@ -11507,13 +11528,12 @@ Examples:
 References:
   docs/input-files-spec.md
   docs/index-json-spec.md
-  docs/miku-indexgen-frontmatter-spec.md
-`);
+  docs/miku-indexgen-frontmatter-spec.md`);
 }
 
 // dist/indexer.js
 import { mkdirSync, readdirSync, statSync } from "node:fs";
-import { dirname as dirname2, join, relative as relative2, resolve as resolve2 } from "node:path";
+import { dirname as dirname2, isAbsolute, join, relative as relative2, resolve as resolve2 } from "node:path";
 import { performance } from "node:perf_hooks";
 
 // dist/frontmatter.js
@@ -11878,6 +11898,18 @@ function buildMarkdownIndexContent(files) {
 var GENERATOR_NAME = "miku-indexgen";
 var JSON_OUTPUT_FILE_NAME = "index.json";
 var MARKDOWN_OUTPUT_FILE_NAME = "index.md";
+var IndexBatchError = class extends Error {
+  childDirectoriesProcessed;
+  childDirectoriesFailed;
+  childFailureMessages;
+  constructor(childDirectoriesProcessed, childDirectoriesFailed, childFailureMessages) {
+    super(`${childDirectoriesFailed} child directories failed.`);
+    this.childDirectoriesProcessed = childDirectoriesProcessed;
+    this.childDirectoriesFailed = childDirectoriesFailed;
+    this.childFailureMessages = childFailureMessages;
+    this.name = "IndexBatchError";
+  }
+};
 function formatOutputStatus(status) {
   return status.padEnd(6, " ");
 }
@@ -11889,6 +11921,10 @@ function collectIndexableFiles(dirPath, recursive, includeExtensions) {
   return collectIndexableFilesWithSet(dirPath, recursive, allowedExtensions, listVisibleEntries(dirPath));
 }
 function getOutputPaths(outputDirectoryPath, options) {
+  const outputDirectoryStat = statSync(outputDirectoryPath, { throwIfNoEntry: false });
+  if (outputDirectoryStat && !outputDirectoryStat.isDirectory()) {
+    throw new Error(`Output directory must be a directory: ${outputDirectoryPath}`);
+  }
   const jsonPath = join(outputDirectoryPath, JSON_OUTPUT_FILE_NAME);
   return {
     jsonPath,
@@ -11901,6 +11937,52 @@ function isGeneratedOutputPath(filePath, outputPaths) {
 }
 function countImmediateSubdirectories(targetPath) {
   return listVisibleEntries(targetPath).filter((entry) => entry.isDirectory()).length;
+}
+function collectChildBaseDirectories(inputParentDirectoryPath, sharedOutputDirectoryPath) {
+  return listVisibleEntries(inputParentDirectoryPath).filter((entry) => entry.isDirectory()).map((entry) => join(inputParentDirectoryPath, entry.name)).filter((childPath) => !isSharedOutputChildDirectory(childPath, inputParentDirectoryPath, sharedOutputDirectoryPath));
+}
+function isSharedOutputChildDirectory(childDirectoryPath, inputParentDirectoryPath, sharedOutputDirectoryPath) {
+  if (!sharedOutputDirectoryPath) {
+    return false;
+  }
+  const normalizedParentPath = resolve2(inputParentDirectoryPath);
+  const normalizedOutputPath = resolve2(sharedOutputDirectoryPath);
+  const relativeOutputPath = relative2(normalizedParentPath, normalizedOutputPath);
+  if (relativeOutputPath.startsWith("..") || isAbsolute(relativeOutputPath)) {
+    return false;
+  }
+  if (!relativeOutputPath || relativeOutputPath.includes("/") || relativeOutputPath.includes("\\")) {
+    return false;
+  }
+  return resolve2(childDirectoryPath) === normalizedOutputPath;
+}
+function resolveBatchSharedOutputDirectory(outputDirectory) {
+  if (!outputDirectory) {
+    return void 0;
+  }
+  const outputDirectoryPath = resolve2(outputDirectory);
+  const outputDirectoryStat = statSync(outputDirectoryPath, { throwIfNoEntry: false });
+  if (outputDirectoryStat && !outputDirectoryStat.isDirectory()) {
+    throw new Error(`Output directory must be a directory: ${outputDirectoryPath}`);
+  }
+  return outputDirectoryPath;
+}
+function resolveChildOutputDirectory(sharedOutputDirectoryPath, childDirectoryPath) {
+  if (!sharedOutputDirectoryPath) {
+    return void 0;
+  }
+  return join(sharedOutputDirectoryPath, getFileName(childDirectoryPath));
+}
+function copyOptionsForChildDirectory(options, childDirectoryPath, childOutputDirectoryPath) {
+  return {
+    ...options,
+    inputDirectory: childDirectoryPath,
+    inputParentDirectory: void 0,
+    outputDirectory: childOutputDirectoryPath,
+    includeExtensions: [...options.includeExtensions],
+    excludeGlobs: options.excludeGlobs ? [...options.excludeGlobs] : void 0,
+    jsonSummaryPaths: options.jsonSummaryPaths ? [...options.jsonSummaryPaths] : void 0
+  };
 }
 function shouldSkipExistingOutput(outputPath) {
   return statSync(outputPath, { throwIfNoEntry: false })?.isFile() === true;
@@ -12032,6 +12114,9 @@ function createIndexes(options) {
   if (options.refreshIndex) {
     return refreshIndex(options);
   }
+  if (options.inputParentDirectory) {
+    return createIndexesForChildDirectories(options);
+  }
   const totalStart = performance.now();
   const targetPath = resolve2(options.inputDirectory);
   const outputDirectoryPath = resolve2(options.outputDirectory ?? options.inputDirectory);
@@ -12057,6 +12142,28 @@ function createIndexes(options) {
   logVerboseTimings(files, options, timings, performance.now() - totalStart, logger);
   return subdirs;
 }
+function createIndexesForChildDirectories(options) {
+  const inputParentDirectoryPath = resolve2(options.inputParentDirectory ?? "");
+  const inputParentStat = statSync(inputParentDirectoryPath, { throwIfNoEntry: false });
+  if (!inputParentStat?.isDirectory()) {
+    throw new Error(`Input parent directory does not exist: ${inputParentDirectoryPath}`);
+  }
+  const sharedOutputDirectoryPath = resolveBatchSharedOutputDirectory(options.outputDirectory);
+  const childDirectories = collectChildBaseDirectories(inputParentDirectoryPath, sharedOutputDirectoryPath);
+  const childFailureMessages = [];
+  for (const childDirectoryPath of childDirectories) {
+    try {
+      createIndexes(copyOptionsForChildDirectory(options, childDirectoryPath, resolveChildOutputDirectory(sharedOutputDirectoryPath, childDirectoryPath)));
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      childFailureMessages.push(`${childDirectoryPath}: ${message}`);
+    }
+  }
+  if (childFailureMessages.length > 0) {
+    throw new IndexBatchError(childDirectories.length, childFailureMessages.length, childFailureMessages);
+  }
+  return childDirectories.length;
+}
 function refreshIndex(options) {
   if (!options.refreshIndex) {
     throw new Error("Please specify an index.json path for --refresh-index.");
@@ -12066,7 +12173,7 @@ function refreshIndex(options) {
 }
 
 // dist/version.js
-var VERSION = "1.6.0";
+var VERSION = "1.6.1";
 
 // dist/main.js
 function main() {
@@ -12075,6 +12182,13 @@ function main() {
     const count = createIndexes(options);
     console.log(`completed: ${count} subdirectories processed`);
   } catch (error) {
+    if (error instanceof IndexBatchError) {
+      for (const failure of error.childFailureMessages) {
+        console.error(`failed: ${failure}`);
+      }
+      console.log(`completed: ${error.childDirectoriesProcessed} child directories processed, ${error.childDirectoriesFailed} failed`);
+      process.exit(1);
+    }
     if (error instanceof HelpRequestedError) {
       printHelp();
       process.exit(0);

@@ -107,8 +107,7 @@ Primary operation:
 Common options:
 
 - `--input-directory <dir>`
-- `--input-parent-directory <dir>`: Java runtime only in the bundled 1.6.0
-  runtime set
+- `--input-parent-directory <dir>`
 - `--refresh-index <index.json>`
 - `--output-directory <dir>`
 - `--title <text>`

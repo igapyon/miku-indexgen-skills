@@ -126,15 +126,15 @@ Recommended behavior:
 - use `--include-ext md,mjs,json` unless the skill has a reason to include more
 
 The Node.js runtime can be used in environments where Node.js is the available
-backend. However, keep Maven + Ant generation Java-based when the workflow must
-cover directory-level batch generation consistently.
+backend. Keep Maven + Ant generation Java-based because Maven can run the jar
+directly without requiring Node.js.
 
 Important backend note:
 
 - Java runtime: supports the Agent Skills index generation workflow, including
   parent-directory generation for multi-skill packages
-- Node.js runtime: suitable for ordinary single input-directory generation when
-  available, but multi-directory batch handling is Java-only
+- Node.js runtime: supports the same CLI help and option surface in the bundled
+  runtime set, including parent-directory generation
 
 Example Maven Antrun shape:
 

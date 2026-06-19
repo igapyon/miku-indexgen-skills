@@ -74,5 +74,5 @@ java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.0.jar --input-d
 Use the Node.js runtime explicitly:
 
 ```bash
-node skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.0.mjs --input-directory docs --markdown
+node skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.1.mjs --input-directory docs --markdown
 ```

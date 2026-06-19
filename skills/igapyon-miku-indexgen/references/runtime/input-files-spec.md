@@ -226,7 +226,7 @@ Extracted text is sanitized for index output. The runtime normalizes Unicode to
 NFC, replaces control characters and zero-width formatting characters with
 spaces, collapses whitespace runs, and trims leading/trailing whitespace.
 
-The bundled 1.6.0 runtime caps front matter `description` at 256 UTF-16 code
+The bundled runtimes cap front matter `description` at 256 UTF-16 code
 units. Longer descriptions are shortened to 253 code units plus `...`.
 
 Markdown `summary` extracted from leading body text is capped at 256 UTF-16

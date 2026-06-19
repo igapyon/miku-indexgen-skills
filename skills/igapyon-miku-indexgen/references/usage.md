@@ -104,8 +104,7 @@ Refresh an existing generated `index.json` from its stored generation metadata:
 java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.0.jar --refresh-index docs/index.json
 ```
 
-Generate indexes for each direct visible child directory. This is a Java
-runtime feature in the bundled 1.6.0 runtime set:
+Generate indexes for each direct visible child directory:
 
 ```bash
 java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.0.jar --input-parent-directory docs-parent --output-directory workplace/indexgen --markdown
@@ -120,7 +119,7 @@ java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.0.jar --input-d
 Use the Node.js runtime directly:
 
 ```bash
-node skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.0.mjs --input-directory docs --markdown
+node skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.1.mjs --input-directory docs --markdown
 ```
 
 Restrict scanned extensions:
@@ -189,11 +188,11 @@ The release zip is generated under `bundle/`.
 
 ## Runtime And Version Notes
 
-Agent Skill package version: `1.6.0`.
+Agent Skill package version: `1.6.1`.
 
 Bundled runtime artifacts:
 
-- `skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.0.mjs`
+- `skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.1.mjs`
 - `skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.0.jar`
 
 Runtime artifact file versions may differ between Node.js and Java artifacts.

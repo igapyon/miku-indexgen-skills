@@ -42,12 +42,13 @@ only as a smoke check that the runtime starts.
 
 ## Backend Capability Notes
 
-Both bundled runtimes can be used for ordinary single input-directory generation
-when the environment supports the runtime.
+Both bundled runtimes expose the same `--help` option surface and can be used
+for ordinary single input-directory generation when the environment supports the
+runtime.
 
-Directory-level batch handling for multiple Agent Skills is Java-only. Use the
-Java runtime when generating an index for a parent `skills/` directory that
-covers multiple skill directories.
+Directory-level batch handling for multiple Agent Skills is available in both
+bundled runtimes. Use the Java runtime for Maven + Ant workflows because Maven
+can run the jar directly without requiring Node.js.
 
 ## generate
 
@@ -78,7 +79,7 @@ Bundled Java command:
 java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.0.jar --input-directory docs
 ```
 
-Java-only child-directory batch command:
+Child-directory batch command:
 
 ```bash
 java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.0.jar --input-parent-directory docs-parent --output-directory out --markdown
@@ -93,7 +94,7 @@ java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.0.jar --refresh
 Bundled Node.js command:
 
 ```bash
-node skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.0.mjs --input-directory docs
+node skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.1.mjs --input-directory docs
 ```
 
 Generate Markdown too:
@@ -134,8 +135,7 @@ java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.0.jar --input-d
 
 Optional arguments are passed through to the upstream runtime:
 
-- `--input-parent-directory <dir>`: Java runtime only in the bundled 1.6.0
-  runtime set
+- `--input-parent-directory <dir>`
 - `--refresh-index <index.json>`
 - `--output-directory <dir>`
 - `--title <text>`

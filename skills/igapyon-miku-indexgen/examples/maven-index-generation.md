@@ -48,8 +48,9 @@ The input directory is:
 skills
 ```
 
-For multi-skill package indexing, use the Java runtime. Multi-directory batch
-handling is Java-only.
+For Maven-based multi-skill package indexing, use the Java runtime so Maven can
+run the jar directly without requiring Node.js. The bundled Node.js runtime has
+the same CLI help and option surface.
 
 ## Regeneration
 

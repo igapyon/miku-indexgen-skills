@@ -37,7 +37,7 @@ test("release zip contains skill files and runtime artifacts", () => {
   assertIncludes(entries, "skills/igapyon-miku-indexgen/templates/pom-multi-skill.xml");
   assertIncludes(entries, "skills/igapyon-miku-indexgen/lib/runtime-artifacts.mjs");
   assertIncludes(entries, "skills/igapyon-miku-indexgen/lib/cli-runner.mjs");
-  assertIncludes(entries, "skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.0.mjs");
+  assertIncludes(entries, "skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.1.mjs");
   assertIncludes(entries, "skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.0.jar");
 
   assert.equal(entries.some((entry) => entry.includes(".DS_Store")), false);

@@ -228,7 +228,7 @@ is longer, the runtime writes the first 253 code units followed by `...`.
 
 Markdown body summaries are also capped at 256 UTF-16 code units when extracted
 from leading body text. A first heading summary is sanitized, but is not
-shortened by the body-text cap in the bundled 1.6.0 runtime.
+shortened by the body-text cap in the bundled runtimes.
 
 ## JSON Summary Extraction
 
