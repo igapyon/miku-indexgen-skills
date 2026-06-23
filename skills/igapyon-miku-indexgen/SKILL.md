@@ -158,6 +158,10 @@ Read these only when needed:
 - [index.json](index.json) for the generated file inventory of this skill
   package
 - [references/INDEX.md](references/INDEX.md) for detailed workflow, runtime, and examples
+- [examples/indexgen-examples.md](examples/indexgen-examples.md)
+  for common Java and Node.js command examples
+- [examples/maven-index-generation.md](examples/maven-index-generation.md)
+  for Maven generation examples for Agent Skills indexes
 - [references/workflow/agent-skill-index-workflow.md](references/workflow/agent-skill-index-workflow.md)
   when applying generated `index.json` to an Agent Skills package
 - [references/runtime/operations-map.md](references/runtime/operations-map.md)

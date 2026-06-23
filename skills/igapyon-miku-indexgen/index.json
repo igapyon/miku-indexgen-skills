@@ -4,7 +4,7 @@
  "generation": {"schemaVersion":1,"inputPath":".","markdownOutput":false,"recursive":true,"includeExtensions":["md","mjs","json"],"inputEncoding":"utf8","outputEncoding":"utf8","title":"igapyon-miku-indexgen Skill Index","includeGeneratorMetadata":true},
  "basePath": ".",
  "files": [
-  {"name":"SKILL.md","path":"SKILL.md","ext":"md","dir":"","size":7858,"description":"Use only when the user explicitly says `igapyon-miku-indexgen` or `miku-indexgen` for miku-indexgen-specific directory index generation workflows. This skill runs the bundled miku-indexgen CLI runtime to generate index.json and optional index.md files; ...","summary":"Miku Indexgen"},
+  {"name":"SKILL.md","path":"SKILL.md","ext":"md","dir":"","size":8102,"description":"Use only when the user explicitly says `igapyon-miku-indexgen` or `miku-indexgen` for miku-indexgen-specific directory index generation workflows. This skill runs the bundled miku-indexgen CLI runtime to generate index.json and optional index.md files; ...","summary":"Miku Indexgen"},
   {"name":"indexgen-examples.md","path":"examples/indexgen-examples.md","ext":"md","dir":"examples","size":2157,"title":"miku-indexgen CLI command examples","topics":["miku-indexgen","command-line","java-runtime","node-runtime","examples"],"summary":"Examples"},
   {"name":"maven-index-generation.md","path":"examples/maven-index-generation.md","ext":"md","dir":"examples","size":1131,"title":"Maven index generation examples","topics":["miku-indexgen","maven","antrun","agent-skills","index-json","examples"],"summary":"Maven Index Generation Examples"},
   {"name":"cli-runner.mjs","path":"lib/cli-runner.mjs","ext":"mjs","dir":"lib","size":1237},
@@ -17,7 +17,7 @@
   {"name":"usage.md","path":"references/usage.md","ext":"md","dir":"references","size":6533,"title":"igapyon-miku-indexgen usage","topics":["miku-indexgen","usage","agent-skill","command-line","index-json","runtime-artifacts"],"summary":"Usage"},
   {"name":"agent-skill-index-workflow.md","path":"references/workflow/agent-skill-index-workflow.md","ext":"md","dir":"references/workflow","size":5000,"title":"Agent Skill index workflow","topics":["miku-indexgen","agent-skills","index-json","maven","single-skill","multi-skill"],"summary":"Agent Skill Index Workflow"},
   {"name":"indexgen-workflow.md","path":"references/workflow/indexgen-workflow.md","ext":"md","dir":"references/workflow","size":1522,"title":"Indexgen workflow","topics":["miku-indexgen","workflow","index-json","front-matter","generated-artifact","directory-scan"],"summary":"Indexgen Workflow"},
-  {"name":"miku-indexgen-1.6.1.mjs","path":"runtime/miku-indexgen-1.6.1.mjs","ext":"mjs","dir":"runtime","size":860275},
+  {"name":"miku-indexgen-1.6.2.mjs","path":"runtime/miku-indexgen-1.6.2.mjs","ext":"mjs","dir":"runtime","size":860321},
   {"name":"README.md","path":"templates/README.md","ext":"md","dir":"templates","size":465,"title":"miku-indexgen templates","topics":["miku-indexgen","templates","maven","antrun","single-skill","multi-skill"],"summary":"Templates"}
  ]
 }
