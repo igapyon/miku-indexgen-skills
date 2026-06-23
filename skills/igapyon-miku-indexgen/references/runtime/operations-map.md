@@ -76,61 +76,61 @@ asks about generated `index.json`.
 Bundled Java command:
 
 ```bash
-java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.0.jar --input-directory docs
+java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.2.jar --input-directory docs
 ```
 
 Child-directory batch command:
 
 ```bash
-java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.0.jar --input-parent-directory docs-parent --output-directory out --markdown
+java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.2.jar --input-parent-directory docs-parent --output-directory out --markdown
 ```
 
 Refresh an existing generated index:
 
 ```bash
-java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.0.jar --refresh-index docs/index.json
+java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.2.jar --refresh-index docs/index.json
 ```
 
 Bundled Node.js command:
 
 ```bash
-node skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.1.mjs --input-directory docs
+node skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.2.mjs --input-directory docs
 ```
 
 Generate Markdown too:
 
 ```bash
-java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.0.jar --input-directory docs --markdown
+java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.2.jar --input-directory docs --markdown
 ```
 
 Write output to a separate directory:
 
 ```bash
-java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.0.jar --input-directory docs --output-directory workplace/indexgen --markdown
+java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.2.jar --input-directory docs --output-directory workplace/indexgen --markdown
 ```
 
 Use JSON summary extraction:
 
 ```bash
-java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.0.jar --input-directory docs --json-summary-path /title,/name
+java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.2.jar --input-directory docs --json-summary-path /title,/name
 ```
 
 Exclude input-relative paths:
 
 ```bash
-java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.0.jar --input-directory docs --include-ext md --exclude-glob "**/images/*"
+java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.2.jar --input-directory docs --include-ext md --exclude-glob "**/images/*"
 ```
 
 Use a root title and no-overwrite guard:
 
 ```bash
-java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.0.jar --input-directory docs --title "Docs Index" --no-overwrite
+java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.2.jar --input-directory docs --title "Docs Index" --no-overwrite
 ```
 
 Use Shift_JIS input and output:
 
 ```bash
-java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.0.jar --input-directory docs --input-encoding shift_jis --output-encoding shift_jis
+java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.2.jar --input-directory docs --input-encoding shift_jis --output-encoding shift_jis
 ```
 
 Optional arguments are passed through to the upstream runtime:

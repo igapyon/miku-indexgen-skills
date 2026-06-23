@@ -53,8 +53,7 @@ function shouldCopyBundleEntry(sourcePath) {
     return false;
   }
   if (name === "tmp" || name === "output" || name === "state") {
-    const relativePath = path.relative(sourceSkillRoot, sourcePath);
-    return relativePath.split(path.sep).length > 1;
+    return false;
   }
   return true;
 }

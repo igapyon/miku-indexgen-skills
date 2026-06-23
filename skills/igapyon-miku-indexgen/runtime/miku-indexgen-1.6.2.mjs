@@ -11441,8 +11441,8 @@ function parseArgs(argv) {
 // dist/help.js
 function printHelp() {
   console.log(`Usage:
-  miku-indexgen --input-directory <dir> [--output-directory <dir>] [--title "Docs Index"] [--markdown] [--no-generator] [--json-summary-path /title,/name] [--no-recursive] [--no-overwrite] [--include-ext md,json] [--exclude-glob "**/images/*"] [--input-encoding utf8] [--output-encoding utf8] [--verbose]
-  miku-indexgen --input-parent-directory <dir> [--output-directory <dir>] [--title "Docs Index"] [--markdown] [--no-generator] [--json-summary-path /title,/name] [--no-recursive] [--no-overwrite] [--include-ext md,json] [--exclude-glob "**/images/*"] [--input-encoding utf8] [--output-encoding utf8] [--verbose]
+  miku-indexgen --input-directory <dir> [--output-directory <dir>] [--title "Docs Index"] [--markdown] [--no-generator] [--json-summary-path /title,/name] [--no-recursive] [--no-overwrite] [--include-ext md,json] [--exclude-glob "**/images/**"] [--input-encoding utf8] [--output-encoding utf8] [--verbose]
+  miku-indexgen --input-parent-directory <dir> [--output-directory <dir>] [--title "Docs Index"] [--markdown] [--no-generator] [--json-summary-path /title,/name] [--no-recursive] [--no-overwrite] [--include-ext md,json] [--exclude-glob "**/images/**"] [--input-encoding utf8] [--output-encoding utf8] [--verbose]
   miku-indexgen --refresh-index <index.json> [--no-overwrite] [--verbose]
 
 Description:
@@ -11471,7 +11471,7 @@ Exclude glob:
   after --include-ext. Separators are normalized to "/". Matching is
   case-sensitive. Supported glob syntax is only *, ?, and **. Character
   classes, brace expansion, extglob, regular expressions, and OS-dependent
-  separators are not supported.
+  separators are not supported. Use /** for recursive directory-tree excludes.
 
 Generated output:
   index.json contains title, generator, generation, basePath, and files[].
@@ -11522,7 +11522,7 @@ Examples:
   miku-indexgen --input-directory docs --output-directory workplace --markdown
   miku-indexgen --input-parent-directory docs-parent --output-directory out --markdown
   miku-indexgen --input-directory docs --json-summary-path /title,/name
-  miku-indexgen --input-directory docs --include-ext md --exclude-glob "**/images/*" --exclude-glob "**/section-text.md"
+  miku-indexgen --input-directory docs --include-ext md --exclude-glob "**/images-*/**" --exclude-glob "**/images/**"
   miku-indexgen --refresh-index workplace/index.json
 
 References:
@@ -12173,7 +12173,7 @@ function refreshIndex(options) {
 }
 
 // dist/version.js
-var VERSION = "1.6.1";
+var VERSION = "1.6.2";
 
 // dist/main.js
 function main() {
