@@ -2,13 +2,12 @@
 
 `miku-indexgen-skills` is an Agent Skills package for using `miku-indexgen` from AI agent workflows.
 
-It helps an agent create a compact file index before reading many files in full.
-The bundled `miku-indexgen` runtime scans a directory and generates `index.json`.
-When Markdown output is enabled, it also generates `index.md`.
-
-In directories with many files, the generated index gives AI agents a compact
-overview before they choose what to read. This is intended to reduce the number
-and size of files an agent needs to load into context.
+It runs the bundled `miku-indexgen` runtime to scan an explicitly selected
+directory and generate `index.json`, with optional `index.md`. A generated index
+can help when a consumer uses its metadata or needs a broad file inventory. It
+can also duplicate direct links and scoped search, and its tokens may add context
+cost. Decide from the actual discovery task; Agent Skill packages do not need a
+root index by default.
 
 Use this skill when you want an agent to understand a selected documentation
 directory, Agent Skill package, reference directory, or other explicitly chosen
@@ -100,11 +99,9 @@ Build the release zip:
 npm run build:bundle:zip
 ```
 
-Generate the skill-local index:
-
-```bash
-mvn generate-resources
-```
+This package does not maintain a generated root `index.json`. Generate an index
+for a selected directory only when its consumer has a concrete need, using the
+CLI examples above.
 
 The release zip is generated under `bundle/`.
 

@@ -9,9 +9,11 @@ Use this skill for `miku-indexgen`-specific directory index generation workflows
 Keep the focus on local CLI-backed generation of `index.json` and optional
 `index.md` from explicitly selected directories.
 
-Use generated indexes to help agents inspect directories with many files before
-choosing which files to read in full. The expected effect is fewer unnecessary
-file reads and lower context size.
+Generate an index only when the user requests it or a concrete consumer will
+use its metadata or broad inventory. Assess the discovery task against direct
+links and scoped filename or content search; an index can add tokens, duplicate
+existing routes, or provide little value to a model that can target the source
+files directly. Do not promise lower context cost without evidence.
 
 Non-negotiable: `index.json` is generated and updated by `miku-indexgen`.
 Never maintain or patch generated `index.json` by hand. When it is missing,
@@ -155,8 +157,6 @@ arguments, and unsupported policy values as hard errors.
 
 Read these only when needed:
 
-- [index.json](index.json) for the generated file inventory of this skill
-  package
 - [references/INDEX.md](references/INDEX.md) for detailed workflow, runtime, and examples
 - [examples/indexgen-examples.md](examples/indexgen-examples.md)
   for common Java and Node.js command examples

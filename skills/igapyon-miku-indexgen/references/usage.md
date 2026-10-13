@@ -16,21 +16,21 @@ inside the installable skill bundle.
 
 ## When To Use
 
-Use `igapyon-miku-indexgen` when an agent should create an index before reading
-many files in full.
+Use `igapyon-miku-indexgen` when the user asks to generate or refresh an index,
+or when a concrete consumer will use its metadata or broad directory inventory.
+Do not start it just because a directory contains many files.
 
-This is especially useful in directories with many files. An agent can inspect
-`index.json` or `index.md` first, then choose a smaller set of files to read in
-detail. The expected effect is lower context usage from fewer and smaller file
-reads.
+A generated inventory may help with a discovery task that benefits from
+metadata or package-wide scanning. It can also add tokens, duplicate direct
+links and scoped searches, or provide little value when an agent can target the
+source files directly. Compare the actual use case before choosing it; do not
+promise lower context use without evidence.
 
 Typical targets:
 
-- repository documentation
-- skill package contents
-- reference directories
-- generated or curated knowledge folders
-- small source trees where a compact file overview is useful
+- user-selected directories where an inventory serves a named discovery task
+- Agent Skill packages only when their own policy adopts an index for a concrete
+  consumer
 
 Generated outputs:
 
@@ -172,17 +172,8 @@ Build the release zip:
 npm run build:bundle:zip
 ```
 
-Generate the skill-local index:
-
-```bash
-mvn generate-resources
-```
-
-Refresh the skill-local index directly:
-
-```bash
-java -jar skills/igapyon-miku-indexgen/runtime/miku-indexgen-1.6.2.jar --refresh-index skills/igapyon-miku-indexgen/index.json
-```
+This package does not maintain a generated root inventory. Use the commands
+above when a consumer has explicitly adopted an index for a selected directory.
 
 The release zip is generated under `bundle/`.
 

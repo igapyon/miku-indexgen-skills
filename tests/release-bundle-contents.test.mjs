@@ -40,7 +40,6 @@ test("release zip contains skill files and runtime artifacts", () => {
   }).trim().split(/\n/).filter(Boolean);
 
   assertIncludes(entries, "skills/igapyon-miku-indexgen/SKILL.md");
-  assertIncludes(entries, "skills/igapyon-miku-indexgen/index.json");
   assertIncludes(entries, "skills/igapyon-miku-indexgen/references/INDEX.md");
   assertIncludes(entries, "skills/igapyon-miku-indexgen/references/usage.md");
   assertIncludes(entries, "skills/igapyon-miku-indexgen/references/workflow/indexgen-workflow.md");

@@ -11,9 +11,11 @@ topics:
 
 # Indexgen Workflow
 
-Use this workflow when a directory contains enough files that an agent should
-inspect a compact generated index before deciding which files to read in full.
-The expected effect is to reduce unnecessary file reads and context size.
+Use this workflow when the user requests generated indexes or a concrete
+consumer will use the inventory or its metadata. Before generation, compare that
+need with direct links and scoped filename or content search. File count alone
+does not establish that an index will help; it can add tokens and duplicate
+existing routes.
 
 1. Confirm the user explicitly requested `igapyon-miku-indexgen` or `miku-indexgen`.
 2. Identify the input directory.
