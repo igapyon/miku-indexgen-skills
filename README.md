@@ -115,7 +115,13 @@ The release zip is generated under `bundle/`.
 
 ## Runtime Artifacts
 
-Agent Skill package version: `1.7.0`.
+Agent Skill package version: `1.7.1`.
+
+The skill package and bundled upstream runtimes have independent versions.
+Skill instructions and documentation can be released with a new package version
+while continuing to bundle the same compatible runtimes. Release tags and bundle
+zip names use the skill package version; runtime file names retain their upstream
+versions. Update runtime artifacts when adopting a new upstream release.
 
 This repository bundles upstream GitHub Release artifacts:
 
@@ -127,7 +133,10 @@ Upstream anchors:
 - `igapyon/miku-indexgen` release `v1.6.2`
 - `igapyon/miku-indexgen-java` release `v1.6.2`
 
-Runtime artifact file versions may differ between Node.js and Java artifacts. Use file-name versions for artifact selection and `--version` only as a smoke check that the runtime starts.
+Runtime artifact file versions may also differ between Node.js and Java artifacts.
+Build scripts and release CI select each runtime independently through
+`lib/runtime-artifacts.mjs`, using file-name versions for artifact selection and
+`--version` as a smoke check that the runtime starts.
 
 ## Repository Notes
 

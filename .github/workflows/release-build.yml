@@ -16,23 +16,23 @@ permissions:
 
 jobs:
   build-and-upload:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     if: startsWith(github.event.release.tag_name || github.event.inputs.tag_name, 'v')
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           ref: ${{ github.event.inputs.tag_name || github.event.release.tag_name || github.ref }}
 
       - name: Setup Java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: "17"
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: 20
 
@@ -40,9 +40,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          PACKAGE_VERSION="$(node -p "require('./package.json').version")"
-          NODE_RUNTIME="skills/igapyon-miku-indexgen/runtime/miku-indexgen-${PACKAGE_VERSION}.mjs"
-          JAVA_RUNTIME="skills/igapyon-miku-indexgen/runtime/miku-indexgen-${PACKAGE_VERSION}.jar"
+          # Skill package and upstream runtime versions are independent.
+          NODE_RUNTIME="$(node --input-type=module -e 'import { resolveRuntimeArtifactPath } from "./skills/igapyon-miku-indexgen/lib/runtime-artifacts.mjs"; console.log(resolveRuntimeArtifactPath({ kind: "node" }));')"
+          JAVA_RUNTIME="$(node --input-type=module -e 'import { resolveRuntimeArtifactPath } from "./skills/igapyon-miku-indexgen/lib/runtime-artifacts.mjs"; console.log(resolveRuntimeArtifactPath({ kind: "java" }));')"
           test -s "${NODE_RUNTIME}"
           test -s "${JAVA_RUNTIME}"
           node "${NODE_RUNTIME}" --version
