@@ -13,15 +13,18 @@ topics:
 
 Use this workflow when applying `miku-indexgen` to an Agent Skills package.
 
-The goal is to place a generated `index.json` at the skill root so an installed
-skill bundle can describe its own files to an agent before the agent reads
-larger references or runtime artifacts.
+An Agent Skill may include a generated `index.json` when a concrete consumer
+uses its metadata or when package-wide discovery provides enough value to justify
+maintaining it. Do not add one by default. Start with `SKILL.md` direct links and
+a curated `references/INDEX.md`; use scoped filename or content search when those
+routes do not answer the task. An index is a file inventory, not a task router.
 
 ## Recommended Shapes
 
 ### Single-Skill Package
 
-For a repository or bundle that effectively owns one skill at:
+When a maintainer has adopted an inventory for a repository or bundle that
+effectively owns one skill at:
 
 ```text
 skills/<skill-name>/
@@ -37,8 +40,9 @@ Treat this file as generated. Do not maintain it by hand.
 
 ### Multi-Skill Package
 
-When a repository has a `skills/` directory containing multiple Agent Skill
-directories, generate the index at the parent directory level:
+When a concrete consumer needs a package-wide generated inventory for a
+repository with multiple Agent Skill directories, it may be generated at the
+parent directory level:
 
 ```text
 skills/index.json
@@ -59,9 +63,8 @@ skills/
     SKILL.md
 ```
 
-For multi-skill packages, each individual skill may still keep its own curated
-`references/INDEX.md` when it has detailed references. The parent
-`skills/index.json` is the generated inventory of the collection.
+A curated `references/INDEX.md` may route within a skill regardless of whether
+the package adopts a machine-readable inventory.
 
 ## Why This Helps
 
@@ -74,13 +77,15 @@ Agent Skills often contain several kinds of files:
 - bundled runtime artifacts
 - generated or metadata files
 
-A generated `index.json` lets an agent inspect the package or collection shape
-first and then choose which files to read in full. The expected effect is fewer
-unnecessary file reads and lower context size.
+A generated `index.json` can help a concrete consumer inspect package shape or
+select files by metadata. It can also add tokens and duplicate simpler direct
+links or scoped searches. Compare it with the actual discovery task before
+adopting it, and keep it only while its consumer and maintenance value remain
+clear.
 
 ## Curated INDEX.md vs Generated index.json
 
-Keep both when the skill has references.
+Use both only when each has a clear role for the consumer.
 
 - `index.json`
   - generated file inventory
@@ -91,11 +96,10 @@ Keep both when the skill has references.
   - explains which reference to read for which question
   - maintained by humans or agent edits
 
-In `references/INDEX.md`, explicitly mention that `../index.json` is the
-generated file inventory.
-
-In `SKILL.md`, include `index.json` in the References section as the generated
-file inventory for the skill package.
+A curated `references/INDEX.md` should route by task and link directly to
+selected references. A skill may omit its machine-readable inventory entirely.
+If an index is adopted, document its concrete consumer and maintenance owner in
+the repository's policy.
 
 ## Maven + Ant Generation
 
@@ -154,8 +158,9 @@ unnecessary staging unless a project-specific reason exists.
 
 ## Bundle Tests
 
-When a generated `index.json` is part of the package, the release bundle test
-should assert that it is included.
+When a generated `index.json` is explicitly adopted for a package, its release
+bundle test should assert that it is included. Packages without an adopted
+index should build and pass their release checks without one.
 
 Single-skill package:
 
@@ -173,8 +178,8 @@ This protects installed bundles from losing the generated inventory.
 
 ## Update Discipline
 
-Regenerate `index.json` after changing skill files that should be visible in the
-inventory:
+When an adopted index has a real consumer, regenerate it after changing files
+that should be visible in its inventory:
 
 - `SKILL.md`
 - reference documents

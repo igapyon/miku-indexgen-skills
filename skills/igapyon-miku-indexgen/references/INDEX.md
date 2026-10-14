@@ -11,12 +11,9 @@ topics:
 # References
 
 This is the curated reference guide for agents using `igapyon-miku-indexgen`.
-For a generated file inventory of the installed skill package, read
-[`../index.json`](../index.json).
-
-Use this file when you need to choose which reference document to read next.
-Use `../index.json` when you need a generated overview of files in the skill
-package.
+Use the direct links below to open the reference needed for the current task.
+For a broader search, list this directory or search filenames and document text
+within the relevant subdirectory.
 
 - [usage.md](usage.md): agent-facing usage guide, request examples, runtime examples, and version notes
 - [workflow/indexgen-workflow.md](workflow/indexgen-workflow.md): generation workflow

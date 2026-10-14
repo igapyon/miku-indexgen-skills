@@ -11,8 +11,9 @@ topics:
 
 # Templates
 
-This directory contains reusable `miku-indexgen` request, configuration, or
-documentation templates.
+This directory contains reusable `miku-indexgen` configuration templates.
+Use them only when a concrete consumer justifies maintaining a generated index;
+Maven wiring is not required for every skill repository.
 
 Available templates:
 

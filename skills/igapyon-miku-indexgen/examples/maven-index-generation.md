@@ -11,8 +11,9 @@ topics:
 
 # Maven Index Generation Examples
 
-Use these examples when adding generated `index.json` files to Agent Skills
-repositories.
+Use these examples when an Agent Skills repository has adopted a generated
+`index.json` for a documented consumer. Agent Skills do not require a root
+index by default.
 
 Reusable templates:
 
@@ -60,4 +61,4 @@ Run:
 mvn generate-resources
 ```
 
-Do not edit generated `index.json` files by hand.
+Do not edit an adopted generated `index.json` by hand.
