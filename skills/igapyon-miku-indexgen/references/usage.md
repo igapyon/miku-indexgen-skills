@@ -185,7 +185,7 @@ The release zip is generated under `bundle/`.
 
 ## Runtime And Version Notes
 
-Agent Skill package version: `1.7.0`.
+Agent Skill package version: `1.7.1`.
 
 Bundled runtime artifacts:
 
