@@ -3,11 +3,15 @@
 `miku-indexgen-skills` is an Agent Skills package for using `miku-indexgen` from AI agent workflows.
 
 It runs the bundled `miku-indexgen` runtime to scan an explicitly selected
-directory and generate `index.json`, with optional `index.md`. A generated index
-can help when a consumer uses its metadata or needs a broad file inventory. It
-can also duplicate direct links and scoped search, and its tokens may add context
-cost. Decide from the actual discovery task; Agent Skill packages do not need a
-root index by default.
+directory and generate or refresh `index.json`, with optional `index.md`. When
+asked to create or update an index, the skill runs the bundled runtime.
+
+Earlier igapyon application and Agent Skill conventions treated `index.json` as
+required. It is now optional, and adoption is conservative: use direct links,
+curated reference guides, and scoped search for ordinary discovery. Generated
+inventories can duplicate those routes and add context cost. This policy keeps
+generation available on request while avoiding automatic adoption in every
+repository.
 
 Use this skill when you want an agent to understand a selected documentation
 directory, Agent Skill package, reference directory, or other explicitly chosen
@@ -45,13 +49,16 @@ agent-facing instructions and tests.
 ## Example Agent Requests
 
 - `miku-indexgen を使って docs の index.json を作って`
+- `docs の index.json を作って`
+- `docs/index.json を更新して`
 - `igapyon-miku-indexgen で docs を走査し、workplace/indexgen に index.json と index.md を出力して`
 - `miku-indexgen で skills 配下の md,json だけを対象に index を作って`
 - `miku-indexgen で README と JSON 設定ファイルを探しやすい index.md も作って`
 
 The skill is intentionally opt-in. Generic requests such as "list files",
-"search this repository", or "read these files" should not activate it unless
-the user explicitly names `miku-indexgen` or `igapyon-miku-indexgen`.
+"search this repository", or "read these files" should not activate it. An
+explicit request to create or refresh `index.json` is sufficient without naming
+`miku-indexgen` or documenting a consumer.
 
 ## Direct Runtime Examples
 
@@ -99,15 +106,16 @@ Build the release zip:
 npm run build:bundle:zip
 ```
 
-This package does not maintain a generated root `index.json`. Generate an index
-for a selected directory only when its consumer has a concrete need, using the
-CLI examples above.
+This package does not maintain a generated root `index.json`. Use the CLI
+examples above when an index is requested for a selected directory or an
+adopted repository workflow requires it. Its absence does not block installation
+or release packaging.
 
 The release zip is generated under `bundle/`.
 
 ## Runtime Artifacts
 
-Agent Skill package version: `1.6.2`.
+Agent Skill package version: `1.7.0`.
 
 This repository bundles upstream GitHub Release artifacts:
 

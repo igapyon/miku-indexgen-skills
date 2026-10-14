@@ -1,6 +1,6 @@
 ---
 name: igapyon-miku-indexgen
-description: Use only when the user explicitly says `igapyon-miku-indexgen` or `miku-indexgen` for miku-indexgen-specific directory index generation workflows. This skill runs the bundled miku-indexgen CLI runtime to generate index.json and optional index.md files; do not auto-activate it for generic directory listing, file investigation, search, or code review requests.
+description: Use for explicit `igapyon-miku-indexgen` or `miku-indexgen` generation workflows, or when the user asks to create or refresh generated `index.json`. Run the bundled CLI runtime to generate index.json and optional index.md; do not auto-activate for generic directory listing, file investigation, search, or code review requests.
 ---
 
 # Miku Indexgen
@@ -9,15 +9,31 @@ Use this skill for `miku-indexgen`-specific directory index generation workflows
 Keep the focus on local CLI-backed generation of `index.json` and optional
 `index.md` from explicitly selected directories.
 
-Generate an index only when the user requests it or a concrete consumer will
-use its metadata or broad inventory. Assess the discovery task against direct
-links and scoped filename or content search; an index can add tokens, duplicate
-existing routes, or provide little value to a model that can target the source
-files directly. Do not promise lower context cost without evidence.
+## Index Adoption Policy
+
+Earlier conventions in igapyon's application and Agent Skill repositories
+treated `index.json` as required. It is now optional, including this package's
+own inventory. Adoption is conservative: prefer direct links, curated reference
+guides, and scoped filename or content search for ordinary discovery. Do not add
+an index or generation/check wiring by default. An index can add tokens and
+duplicate existing routes; do not promise lower context cost without evidence.
+
+When the user asks to create or update `index.json`, run the bundled runtime for
+the requested scope. The explicit request is sufficient reason to generate it;
+do not require a named consumer, a permanent adoption policy, or another
+confirmation merely because indexes are optional. Assess whether an index is
+useful when advising about adoption, not as a prerequisite to fulfilling a
+generation request.
+
+A missing optional index is valid and does not itself require generation or
+repair. Follow an existing repository's adopted generation workflow when it
+applies. Optional status alone is not a reason to delete an existing index.
 
 Non-negotiable: `index.json` is generated and updated by `miku-indexgen`.
-Never maintain or patch generated `index.json` by hand. When it is missing,
-stale, or needs different options, rerun the runtime.
+Never maintain or patch generated `index.json` by hand. For a requested or
+adopted generation/update, rerun the runtime.
+
+## Activation
 
 For this skill, `miku-indexgen` is narrow opt-in by default. Do not trigger it
 from generic words such as list, scan, files, tree, search, grep, read, code
@@ -40,6 +56,7 @@ Markdown files, many files, or an Agent Skills structure.
 Do not start this skill for generic command-line, Java, Node.js, Maven, or Ant
 questions unless they explicitly target `miku-indexgen` or generated
 `index.json`.
+Discussing or editing this skill does not itself request index generation.
 
 Without one of these triggers, answer normally or ask a brief clarifying
 question if using `miku-indexgen` would materially change the result.
@@ -83,10 +100,10 @@ directory, recursion setting, extension filters, encoding, and overwrite policy.
 `index.json` is generated and updated by the upstream `miku-indexgen` runtime.
 Do not maintain it by hand.
 
-When `index.json` is missing, stale, or needs different options, rerun
-`miku-indexgen` with the intended input directory, output directory, filters,
-encoding, recursion, and overwrite policy. Do not manually patch `index.json`
-as a substitute for running the runtime.
+For a requested or adopted generation/update, run `miku-indexgen` with the
+intended input directory, output directory, filters, encoding, recursion, and
+overwrite policy. Do not manually patch `index.json` as a substitute for running
+the runtime.
 
 When an existing generated `index.json` already contains `generation` metadata,
 prefer `--refresh-index <index.json>` to regenerate it with the stored

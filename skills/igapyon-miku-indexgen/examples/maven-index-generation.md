@@ -11,9 +11,10 @@ topics:
 
 # Maven Index Generation Examples
 
-Use these examples when an Agent Skills repository has adopted a generated
-`index.json` for a documented consumer. Agent Skills do not require a root
-index by default.
+Use these examples when the user requests Maven generation wiring or an Agent
+Skills repository has adopted it. Agent Skills do not require a root index by
+default. A one-time request to generate or refresh `index.json` can use the CLI
+directly without adding Maven wiring.
 
 Reusable templates:
 
