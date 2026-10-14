@@ -12,8 +12,9 @@ topics:
 # Templates
 
 This directory contains reusable `miku-indexgen` configuration templates.
-Use them only when a concrete consumer justifies maintaining a generated index;
-Maven wiring is not required for every skill repository.
+Use them when the user requests Maven generation wiring or the repository has
+adopted it. Indexes and Maven wiring are optional; a one-time generation request
+can use the CLI directly without adopting these templates.
 
 Available templates:
 

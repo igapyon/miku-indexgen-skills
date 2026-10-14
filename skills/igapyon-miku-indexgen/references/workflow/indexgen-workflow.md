@@ -11,13 +11,19 @@ topics:
 
 # Indexgen Workflow
 
-Use this workflow when the user requests generated indexes or a concrete
-consumer will use the inventory or its metadata. Before generation, compare that
-need with direct links and scoped filename or content search. File count alone
-does not establish that an index will help; it can add tokens and duplicate
-existing routes.
+Use this workflow when the user requests generation or refresh, or an adopted
+repository workflow calls for it. An explicit request to create or update
+`index.json` is sufficient; it does not require a separate adoption decision or
+documented consumer. The optional-adoption policy is in
+[../../SKILL.md](../../SKILL.md#index-adoption-policy).
 
-1. Confirm the user explicitly requested `igapyon-miku-indexgen` or `miku-indexgen`.
+When advising about adoption, prefer direct links and scoped filename or content
+search unless a concrete need justifies an index. File count alone does not
+establish that an index will help. A missing optional index is not a generation
+request.
+
+1. Identify the requested generation or refresh operation. A direct request to
+   create or update `index.json` qualifies without naming `miku-indexgen`.
 2. Identify the input directory.
 3. Choose the output directory. Use a separate output directory when modifying the input directory is not intended.
 4. Decide whether Markdown output is required.

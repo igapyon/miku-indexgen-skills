@@ -17,20 +17,23 @@ inside the installable skill bundle.
 ## When To Use
 
 Use `igapyon-miku-indexgen` when the user asks to generate or refresh an index,
-or when a concrete consumer will use its metadata or broad directory inventory.
-Do not start it just because a directory contains many files.
+or when an adopted repository workflow requires it. Fulfill an explicit request
+without requiring a named consumer or permanent adoption policy.
 
 A generated inventory may help with a discovery task that benefits from
 metadata or package-wide scanning. It can also add tokens, duplicate direct
 links and scoped searches, or provide little value when an agent can target the
-source files directly. Compare the actual use case before choosing it; do not
-promise lower context use without evidence.
+source files directly. For ordinary discovery, prefer direct links, curated
+reference guides, and scoped search. Earlier required-index conventions are now
+optional; see [../SKILL.md](../SKILL.md#index-adoption-policy). Compare the actual
+use case when advising about adoption, not as a gate on requested generation.
+Do not promise lower context use without evidence or start generation merely
+because a directory has many files or lacks an index.
 
 Typical targets:
 
-- user-selected directories where an inventory serves a named discovery task
-- Agent Skill packages only when their own policy adopts an index for a concrete
-  consumer
+- user-selected directories for requested generation or refresh
+- Agent Skill packages for a requested index or an adopted inventory workflow
 
 Generated outputs:
 
@@ -76,13 +79,15 @@ Detailed field rules are documented in
 Examples:
 
 - `miku-indexgen を使って docs の index.json を作って`
+- `docs の index.json を作って`
+- `docs/index.json を更新して`
 - `igapyon-miku-indexgen で docs を走査し、workplace/indexgen に index.json と index.md を出力して`
 - `miku-indexgen で skills 配下の md,json だけを対象に index を作って`
 - `miku-indexgen で README と JSON 設定ファイルを探しやすい index.md も作って`
 
 The skill is intentionally opt-in. Generic requests such as "list files",
-"search this repository", or "read these files" should not activate it unless
-the user explicitly names `miku-indexgen` or `igapyon-miku-indexgen`.
+"search this repository", or "read these files" should not activate it. A direct
+request to create or refresh `index.json` qualifies without naming the tool.
 
 ## Direct Runtime Examples
 
@@ -173,13 +178,14 @@ npm run build:bundle:zip
 ```
 
 This package does not maintain a generated root inventory. Use the commands
-above when a consumer has explicitly adopted an index for a selected directory.
+above for requested generation or an adopted repository workflow. An absent
+optional index does not block installation or release packaging.
 
 The release zip is generated under `bundle/`.
 
 ## Runtime And Version Notes
 
-Agent Skill package version: `1.6.2`.
+Agent Skill package version: `1.7.0`.
 
 Bundled runtime artifacts:
 
